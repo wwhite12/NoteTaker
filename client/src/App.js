@@ -11,18 +11,27 @@ import NoteList from "./components/NoteList";
 
 class App extends Component {
 
+  state = {
+    user: null
+  }
+  
+  setUser = (user) => {
+    this.setState({ user });
+  }
 
   render() {
+    const {user} = this.state;
+    const setUser = this.setUser
     return (
       <Router>
         <div className="App">
           <Nav />
           <Switch>
             <Route exact path="/" component={Login} />
-            <Route exact path="/contactform" component={ContactForm} />
-            <Route exact path="/contactlist" component={ContactList} />
-            <Route exact path="/notelist" component={NoteList} />
-            <Route exact path="/noteform" component={NoteForm} />
+            <ProtectedRoute exact path="/contactform" component={ContactForm} />
+            <ProtectedRoute exact path="/contactlist" component={ContactList} />
+            <ProtectedRoute exact path="/notelist" component={NoteList} />
+            <ProtectedRoute exact path="/noteform" component={NoteForm} />
             <Route component={Login} />
           </Switch>
         </div>
