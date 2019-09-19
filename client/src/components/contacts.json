@@ -1,0 +1,56 @@
+[
+    {
+        "firstName": "Joe",
+        "lastName": "May",
+        "company": "Unlimited Enclosures, Inc.",
+        "streetAddress": "1921 Industrial Lane",
+        "city": "Peachtree City",
+        "state": "GA",
+        "zip": "30290",
+        "country": "USA",
+        "email": "joe.may@unlimitedenclosures.com",
+        "phone": "404-505-0909",
+        "interest": "Fishing"
+    },
+    {
+        "firstName": "Chris",
+        "lastName": "Davis",
+        "company": "Glass Plus, Inc.",
+        "streetAddress": "100 Mickey Way",
+        "city": "Orlando",
+        "state": "FL",
+        "zip": "60789",
+        "country": "USA",
+        "email": "chris.davis@glassplus.com",
+        "phone": "404-505-1111",
+        "interest": "Golf"
+    },
+    {
+        "firstName": "Bob",
+        "lastName": "Jones",
+        "company": "GlassPro LLC",
+        "streetAddress": "200 State Street",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "22222",
+        "country": "USA",
+        "email": "bob.jones@glasspro.com",
+        "phone": "404-505-7777",
+        "interest": "Chicago Cubs"
+    },
+    {
+        "firstName": "Jeff",
+        "lastName": "Simmons",
+        "company": "Clear Glass Installers",
+        "streetAddress": "5000 Grand Canyon Lane",
+        "city": "Phoeniz",
+        "state": "AZ",
+        "zip": "33333",
+        "country": "USA",
+        "email": "jeff.simmons@clearglassinstallers.com",
+        "phone": "404-505-2222",
+        "interest": "Hiking"
+    }
+
+
+]
