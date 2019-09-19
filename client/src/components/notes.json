@@ -1,0 +1,44 @@
+[
+    {
+        "id": "01",
+        "title": "Note 1",
+        "noteBody": "Note Body 1",
+        "createdOn": "20190801",
+        "contactRef": "Joe May"
+    },
+    {
+        "id": "02",
+        "title": "Note 2",
+        "noteBody": "Note Body",
+        "createdOn": "20190901",
+        "contactRef": "Joe May"
+    },
+    {
+        "id": "03",
+        "title": "Note 3",
+        "noteBody": "Note Body 3",
+        "createdOn": "20190915",
+        "contactRef": "Joe May"
+    },
+    {
+        "id": "04",
+        "title": "Note 1",
+        "noteBody": "Note Body 1",
+        "createdOn": "20190801",
+        "contactRef": "Bob Jones"
+    },
+    {
+        "id": "05",
+        "title": "Note 2",
+        "noteBody": "Note Body 2",
+        "createdOn": "20190901",
+        "contactRef": "Bob Jones"
+    },
+    {
+        "id": "06",
+        "title": "Note 3",
+        "noteBody": "Note Body 3",
+        "createdOn": "20190915",
+        "contactRef": "Bob Jones"
+    }
+]
