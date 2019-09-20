@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
 import Login from "./components/Login";

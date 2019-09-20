@@ -36,6 +36,10 @@ class Login extends React.Component {
 
     }
 
+    handleNewUser = event => {
+        event.preventDefault();
+    }
+
     render() {
         return (
             <div>
