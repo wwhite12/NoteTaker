@@ -8,22 +8,43 @@ import NoteForm from "./components/NoteForm";
 import NoteList from "./components/NoteList";
 
 
+const HomePage = props => <div>
+  
+      <ContactList/>
+  
+  <div className="container">
+    <div className="row">
+      <div className="col">
+        <NoteList/>
+      </div>
+    </div>
 
-class App extends Component {
+    <div className="row">
+      <div className="col">
+        <ContactForm />
+      </div>
+      <div className="col">
+        <NoteForm />
+      </div>
+    </div>
+  </div>
+</div>
+ 
+const LoginPage = props =>
+  <div>
+    <Login />
+  </div>
 
-
+class App extends React.Component {
+  
   render() {
     return (
       <Router>
         <div className="App">
           <Nav />
           <Switch>
-            <Route exact path="/" component={Login} />
-            <Route exact path="/contactform" component={ContactForm} />
-            <Route exact path="/contactlist" component={ContactList} />
-            <Route exact path="/notelist" component={NoteList} />
-            <Route exact path="/noteform" component={NoteForm} />
-            <Route component={Login} />
+            <Route exact path="/" component={LoginPage} />
+            <Route exact path="/homePage" component={HomePage} />
           </Switch>
         </div>
       </Router>
@@ -32,3 +53,9 @@ class App extends Component {
 }
 
 export default App;
+
+
+{/* <Route exact path="/contactlist" component={ContactList} />
+<Route exact path="/notelist" component={NoteList} />
+<Route exact path="/noteform" component={NoteForm} />
+<Route component={Login} /> */}
