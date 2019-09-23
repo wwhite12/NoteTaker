@@ -10,26 +10,35 @@ import NoteList from "./components/NoteList";
 import UserContext from "./context/UserContext";
 import authenticatedAxios from "./utils/AuthenticatedAxios";
 
-
-class App extends Component {
-
-  state = {
-    user: null
-  }
+const HomePage = props => <div>
   
-  setUser = (user) => {
-    this.setState({ user });
-  }
+      <ContactList/>
+  
+  <div className="container">
+    <div className="row">
+      <div className="col">
+        <NoteList/>
+      </div>
+    </div>
 
-  componentDidMount() {
-    const token = localStorage.getItem("token");
-    if(token) {
-      authenticatedAxios
-      .get("/api/me")
-      .then(response => this.setUser(response.data));
-    }
-  }
+    <div className="row">
+      <div className="col">
+        <ContactForm />
+      </div>
+      <div className="col">
+        <NoteForm />
+      </div>
+    </div>
+  </div>
+</div>
+ 
+const LoginPage = props =>
+  <div>
+    <Login />
+  </div>
 
+class App extends React.Component {
+  
   render() {
     const {user} = this.state;
     const setUser = this.setUser
@@ -46,11 +55,7 @@ class App extends Component {
           >
           <Switch>
             <Route exact path="/" component={LoginPage} />
-            <ProtectedRoute exact path="/contactform" component={ContactForm} />
-            <ProtectedRoute exact path="/contactlist" component={ContactList} />
-            <ProtectedRoute exact path="/notelist" component={NoteList} />
-            <ProtectedRoute exact path="/noteform" component={NoteForm} />
-            <Route component={LoginPage} />
+            <Route exact path="/homePage" component={HomePage} />
           </Switch>
           </UserContext.Provider>
         </div>
@@ -60,3 +65,9 @@ class App extends Component {
 }
 
 export default App;
+
+
+{/* <Route exact path="/contactlist" component={ContactList} />
+<Route exact path="/notelist" component={NoteList} />
+<Route exact path="/noteform" component={NoteForm} />
+<Route component={Login} /> */}
