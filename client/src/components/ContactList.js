@@ -17,7 +17,6 @@ class ContactList extends React.Component {
                         lastName={contact.lastName}
                         company={contact.company}
                     />
-
                 ))}
             </div>
         );
