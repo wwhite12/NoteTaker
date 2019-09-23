@@ -1,5 +1,5 @@
 import React from "react";
-//import "./style.css";
+import "./style.css";
 
 
 class Nav extends React.Component {
@@ -17,7 +17,7 @@ class Nav extends React.Component {
       <img src="#" alt="Logo" height="40px" width="200px"></img>
       <ul className="nav justify-content-end">
         <li className="nav-item">
-          <a className="nav-link active" href="#">Logged in as: {this.state.username}</a>
+          <a className="nav-link active" href="/api/">Logged in as: {this.state.username}</a>
         </li>
         <li className="nav-item">
           <a className="nav-link" href="#">Log Out</a>
