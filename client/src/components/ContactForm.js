@@ -1,5 +1,5 @@
 import React from "react"
-
+import "./ContactListStyle.css"
 
 class ContactForm extends React.Component {
   state = {
@@ -55,7 +55,7 @@ class ContactForm extends React.Component {
 
     return (
 
-      <div>
+      <div className="ContactForm card card-body">
         <form className="form">
           <input
             value={this.state.firstName}
