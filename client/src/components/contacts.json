@@ -10,7 +10,8 @@
         "country": "USA",
         "email": "joe.may@unlimitedenclosures.com",
         "phone": "404-505-0909",
-        "interest": "Fishing"
+        "interest": "Fishing",
+        "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
     },
     {
         "firstName": "Chris",
@@ -23,7 +24,8 @@
         "country": "USA",
         "email": "chris.davis@glassplus.com",
         "phone": "404-505-1111",
-        "interest": "Golf"
+        "interest": "Golf",
+        "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
     },
     {
         "firstName": "Bob",
@@ -36,7 +38,8 @@
         "country": "USA",
         "email": "bob.jones@glasspro.com",
         "phone": "404-505-7777",
-        "interest": "Chicago Cubs"
+        "interest": "Chicago Cubs",
+        "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
     },
     {
         "firstName": "Jeff",
@@ -49,8 +52,24 @@
         "country": "USA",
         "email": "jeff.simmons@clearglassinstallers.com",
         "phone": "404-505-2222",
-        "interest": "Hiking"
+        "interest": "Hiking",
+        "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
+    },
+    {
+        "firstName": "Horacio",
+        "lastName": "Garcia",
+        "company": "Clear Glass Installers",
+        "streetAddress": "5000 Grand Canyon Lane",
+        "city": "Fairburn",
+        "state": "GA",
+        "zip": "33333",
+        "country": "USA",
+        "email": "jeff.simmons@clearglassinstallers.com",
+        "phone": "404-505-2222",
+        "interest": "Hiking",
+        "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
     }
+
 
 
 ]

@@ -35,7 +35,7 @@ class NoteForm extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="NoteForm">
                 <form className="form">
                     <input
                         value={this.state.noteTitle}
