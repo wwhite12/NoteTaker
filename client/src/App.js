@@ -82,13 +82,3 @@ class App extends Component {
 }
 
 export default App;
-<<<<<<< HEAD
-
-{
-  /* <Route exact path="/contactlist" component={ContactList} />
-<Route exact path="/notelist" component={NoteList} />
-<Route exact path="/noteform" component={NoteForm} />
-<Route component={Login} /> */
-}
-=======
->>>>>>> e89fb7cec5fe909612f5b829c1dfd7fcd6aaf799

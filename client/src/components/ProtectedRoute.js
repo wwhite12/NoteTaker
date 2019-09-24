@@ -4,11 +4,12 @@ import Auth from "../utils/Auth";
 
 const ProtectedRoute = ({component: Component, ...rest}) => (
     <Route {...rest} render={props => (
+        console.log(Auth.isLoggedIn),
         Auth.isLoggedIn() ? (
             <Component {...props} />
         ) : (
             alert("Unauthorized"),
-            <Redirect to="/login" />
+            <Redirect to="/" />
         )
     )} />
 );

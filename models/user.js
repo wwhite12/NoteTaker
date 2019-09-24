@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 // Save a reference to the Schema constructor
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
 // Using the Schema constructor, create a new NoteSchema object
 
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
   userId: Number,
   username: {
     type: String,
@@ -23,9 +23,7 @@ UserSchema.methods.comparePassword = function(inputPass) {
 
 UserSchema.pre("save", function(next) {
   if (!this.isModified("password")) return next();
-
   this.password = bcrypt.hashSync(this.password, 10);
-
   return next();
 });
 
