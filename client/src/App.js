@@ -3,60 +3,77 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
-import LoginPage from "./components/LoginPage";
+import LoginPage from "./components/Login";
 import Nav from "./components/Nav/Nav";
 import NoteForm from "./components/NoteForm";
 import NoteList from "./components/NoteList";
 import UserContext from "./context/UserContext";
 import authenticatedAxios from "./utils/AuthenticatedAxios";
 
-const HomePage = props => <div>
-  
-      <ContactList/>
-  
-  <div className="container">
-    <div className="row">
-      <div className="col">
-        <NoteList/>
-      </div>
-    </div>
-
-    <div className="row">
-      <div className="col">
-        <ContactForm />
-      </div>
-      <div className="col">
-        <NoteForm />
-      </div>
-    </div>
-  </div>
-</div>
- 
-const LoginPage = props =>
+const HomePage = props => (
   <div>
-    <Login />
-  </div>
+    <ContactList />
 
-class App extends React.Component {
-  
+    <div className="container">
+      <div className="row">
+        <div className="col">
+          <NoteList />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col">
+          <ContactForm />
+        </div>
+        <div className="col">
+          <NoteForm />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// const LoginPage = props =>
+//   <div>
+//     <Login />
+//   </div>
+
+class App extends Component {
+  state = {
+    user: null
+  };
+
+  setUser = user => {
+    this.setState({ user });
+  };
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      authenticatedAxios
+        .get("/api/me")
+        .then(response => this.setUser(response.data));
+    }
+  }
+
   render() {
-    const {user} = this.state;
-    const setUser = this.setUser
+    const { user } = this.state;
+    const setUser = this.setUser;
     return (
       <Router>
         <div className="App">
           <Nav />
 
           <UserContext.Provider
-          value={{
-            user: user,
-            setUser: setUser
-          }}
+            value={{
+              user: user,
+              setUser: setUser
+            }}
           >
-          <Switch>
-            <Route exact path="/" component={LoginPage} />
-            <Route exact path="/homePage" component={HomePage} />
-          </Switch>
+            <Switch>
+              <ProtectedRoute exact path="/homePage" component={HomePage} />
+              <Route exact path="/" component={LoginPage} />
+            </Switch>
           </UserContext.Provider>
         </div>
       </Router>
@@ -66,8 +83,9 @@ class App extends React.Component {
 
 export default App;
 
-
-{/* <Route exact path="/contactlist" component={ContactList} />
+{
+  /* <Route exact path="/contactlist" component={ContactList} />
 <Route exact path="/notelist" component={NoteList} />
 <Route exact path="/noteform" component={NoteForm} />
-<Route component={Login} /> */}
+<Route component={Login} /> */
+}

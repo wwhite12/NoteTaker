@@ -7,9 +7,10 @@ const ProtectedRoute = ({component: Component, ...rest}) => (
         Auth.isLoggedIn() ? (
             <Component {...props} />
         ) : (
+            alert("Unauthorized"),
             <Redirect to="/login" />
         )
-    )} {...rest} />
+    )} />
 );
 
 export default ProtectedRoute;

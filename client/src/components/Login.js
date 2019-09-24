@@ -1,10 +1,15 @@
-import React from "react";
+import React, {Component} from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import {withRouter} from "react-router-dom";
+import UserContext from "../context/UserContext";
+import Auth from "../utils/Auth";
 import "./LoginStyle.css"
 
 
 
 class Login extends React.Component {
+  static contextType = UserContext;
+
     state = {
         username: "",
         password: ""
@@ -25,19 +30,26 @@ class Login extends React.Component {
 
     handleFormSubmit = event => {
         event.preventDefault();
-        if (!this.state.username || !this.state.password) {
-            alert("Enter username and password");
+        const {username, password} = this.state;
+        
+        if (username && password) {
+          Auth.logIn(username, password, (response) => {
+            this.context.setUser(response);
+            this.props.history.push("/homePage");
+          })
         } else {
-            localStorage.setItem("username", this.state.username);
+          alert("Enter username and password");
+          };
+            // localStorage.setItem("username", this.state.username);
 
         }
 
-        this.setState({
-            username: "",
-            password: ""
-        });
+        // this.setState({
+        //     username: "",
+        //     password: ""
+        // });
 
-    }
+    
 
     render() {
         return (
@@ -142,4 +154,4 @@ class Login extends React.Component {
 }
 
 
-export default Login
+export default withRouter (Login);

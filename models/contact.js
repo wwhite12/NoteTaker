@@ -21,7 +21,7 @@ const contactSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Note"
         }
-    ]
+    
     ],
 });
 

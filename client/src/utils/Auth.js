@@ -2,23 +2,19 @@ import axios from "axios";
 
 
 function Auth () {
-    let loggedIn = false;
 
     function logIn (username, password, cb) {
+        console.log("logging in");
         axios.post("/api/authenticate", {username, password})
         .then(response => {
+            console.log(response.data);
             localStorage.setItem("token", response.data.token);
-            loggedIn = true;
             cb(response.data);
-        })
-        .catch(err => {
-            console.log(err);
         });
     }
 
     function logOut (cb) {
         localStorage.removeItem("token");
-        loggedIn = false;
         cb();
     }
 
@@ -27,7 +23,11 @@ function Auth () {
     }
 
     function isLoggedIn () {
-        return loggedIn;
+        if (localStorage.getItem("token")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     return {
