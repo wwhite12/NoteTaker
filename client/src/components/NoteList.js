@@ -66,7 +66,7 @@ class NoteList extends React.Component {
                             </MDBRow>
                         </form>
                     </MDBCol>
-                    <MDBCol md="3" className="text-center">
+                    <MDBCol md="2" className="text-center">
                         <ul className="list-unstyled mb-0">
                             <li>
                                 <MDBIcon icon="map-marker-alt" size="2x" className="blue-text" />

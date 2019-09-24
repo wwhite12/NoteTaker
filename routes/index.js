@@ -2,7 +2,7 @@ const router = require("express").Router();
 const apiRoutes = require("./api");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-const authWare = require("../models/");
+const authWare = require("../");
 
 router.post("/api/signup", function(req, res) {
   User.create(req.body)
@@ -58,7 +58,8 @@ router.get("/api/me", authWare, function (req, res) {
     })
 });
 
-// Contact routes
-router.use("/api", apiRoutes);
+    // app.use("/contacts", contactRoutes);
+    router.route("/notes", notesRoutes);
 
-module.exports = router;
+    return router
+}
