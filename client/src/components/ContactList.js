@@ -1,8 +1,9 @@
 import React from "react";
-import contacts from "./contacts.json";
+import API from "../utils/API";
+//import contacts from "./contacts.json";
 import ContactCard from "./ContactCard";
 //import { MDBTable} from 'mdbreact';
-import NoteList from "./NoteList.js";
+//import NoteList from "./NoteList.js";
 import APP from "../App.js"
 
 
@@ -14,23 +15,51 @@ import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } fro
 import { MDBJumbotron } from "mdbreact";
 import NoteCard from "./NoteCard";
 import NewNoteButton from "./NewNoteButton";
-import notes from "./notes.json";
 
 class ContactList extends React.Component {
   state = {
-    contacts,
-    notes,
-    contact: contacts[0]
+    contacts: [],
+    contact: [],
+    currentObjectId: ""
 
 
   };
 
 
 
-  ViewContact = id => {
-    const contact = this.state.contacts[id];
-    this.setState({contact})
+  componentDidMount() {
+    this.loadContacts();
   }
+
+  loadContacts = () => {
+    API.getContacts()
+      .then(res => {
+        this.setState({ contacts: res.data })
+        this.setState({ contact: res.data[0] })
+
+        console.log(res)
+
+      }
+
+      )
+
+
+      .catch(err => console.log(err));
+
+  }
+
+  ViewContact = key => {
+    const contact = this.state.contacts[key];
+    const id = this.state.contacts[key]["_id"]
+    this.setState({ contact })
+    this.setState({ currentObjectId: id })
+    API.getContact(id).then(res => {
+      console.log(res.data.notes)
+    })
+  }
+
+
+
 
   render() {
 
@@ -74,7 +103,7 @@ class ContactList extends React.Component {
                 </div>
                 <h2 className="h1-responsive font-weight-bold text-center my-5">
                   {this.state.contact.firstName} {this.state.contact.lastName}
-                    </h2>
+                </h2>
                 <MDBRow>
                   <MDBCol md="9" className="md-0 mb-5 ">
                     <form>
@@ -97,21 +126,6 @@ class ContactList extends React.Component {
 
                       <MDBRow>
                         <MDBCol md="12">
-                          <div className="md-form mb-0">
-                            <MDBTable bordered scrollY maxHeight="300px">
-                              {this.state.notes.map((note, index) => (
-                                <NoteCard
-                                  key={index}
-                                  id={note.id}
-                                  title={note.title}
-                                  noteBody={note.noteBody}
-                                  createdOn={note.createdOn}
-                                  contactRef={note.contactReg}
-
-                                />
-                              ))}
-                            </MDBTable>
-                          </div>
                         </MDBCol>
                       </MDBRow>
                     </form>
@@ -123,7 +137,7 @@ class ContactList extends React.Component {
                         <p>
                           {this.state.contact.streetAddress} {this.state.contact.city}{this.state.contact.state} {this.state.contact.zip} {this.state.contact.country}
 
-                    </p>
+                        </p>
                       </li>
                       <li>
                         <MDBIcon icon="phone" size="2x" className="blue-text mt-4" />
@@ -138,19 +152,7 @@ class ContactList extends React.Component {
                 </MDBRow>
               </MDBJumbotron>
 
-                      {/* // "firstName": "Horacio",
-// "lastName": "Garcia",
-// "company": "Clear Glass Installers",
-// "streetAddress": "5000 Grand Canyon Lane",
-// "city": "Fairburn",
-// "state": "GA",
-// "zip": "33333",
-// "country": "USA",
-// "email": "jeff.simmons@clearglassinstallers.com",
-// "phone": "404-505-2222",
-// "interest": "Hiking",
-// "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
- */}
+              }
 
 
 
