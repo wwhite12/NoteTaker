@@ -5,20 +5,11 @@ import ContactList from "./components/ContactList";
 import Login from "./components/Login";
 import Nav from "./components/Nav/Nav";
 import NoteForm from "./components/NoteForm";
-import NoteList from "./components/NoteList";
-
 
 const HomePage = props => <div>
-  
-      <ContactList/>
-  
-  <div className="container">
-    <div className="row">
-      <div className="col">
-        <NoteList/>
-      </div>
-    </div>
 
+  <ContactList />
+  {/* <div className="container">
     <div className="row">
       <div className="col">
         <ContactForm />
@@ -27,16 +18,16 @@ const HomePage = props => <div>
         <NoteForm />
       </div>
     </div>
-  </div>
+  </div> */}
 </div>
- 
+
 const LoginPage = props =>
   <div>
     <Login />
   </div>
 
 class App extends React.Component {
-  
+
   render() {
     return (
       <Router>
@@ -53,9 +44,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-
-{/* <Route exact path="/contactlist" component={ContactList} />
-<Route exact path="/notelist" component={NoteList} />
-<Route exact path="/noteform" component={NoteForm} />
-<Route component={Login} /> */}
