@@ -15,11 +15,12 @@ class ContactList extends React.Component {
   constructor() {
     super();
     this.state = {
-      contacts: [...contacts],
+      contacts: [],
       notes,
-      contact: { ...contacts[0] },
+      contact: [],
       isFlipped: false,
-      currentObjectId: ""
+      currentObjectId: "",
+      currentNotes: []
 
     };
     this.handleClick = this.handleClick.bind(this);
@@ -42,19 +43,19 @@ class ContactList extends React.Component {
 
   componentDidMount() {
     this.loadContacts();
-    ViewContact = id => {
-      const contact = this.state.contacts[id];
-      this.setState({ contact })
-    }
+    //    ViewContact = id => {
+    //      const contact = this.state.contacts[id];
+    //      this.setState({ contact })
+    //}
   }
 
   loadContacts = () => {
     API.getContacts()
       .then(res => {
+        console.log(res.data)
         this.setState({ contacts: res.data })
         this.setState({ contact: res.data[0] })
 
-        console.log(res)
 
       }
 
@@ -71,7 +72,8 @@ class ContactList extends React.Component {
     this.setState({ contact })
     this.setState({ currentObjectId: id })
     API.getContact(id).then(res => {
-      console.log(res.data.notes)
+      const notes = res.data.notes
+      this.setState({ currentNotes: notes })
     })
   }
 
@@ -142,7 +144,7 @@ class ContactList extends React.Component {
                               <MDBCol id="notes-list" md="12">
                                 <div className="md-form mb-0">
                                   <MDBTable bordered scrollY maxHeight="300px">
-                                    {this.state.notes.map((note, index) => (
+                                    {this.state.currentNotes.map((note, index) => (
                                       <NoteCard
                                         key={index}
                                         id={note.id}

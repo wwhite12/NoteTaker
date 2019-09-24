@@ -1,9 +1,7 @@
-module.exports = (app, router) => {
-    // const contactRoutes = require("./api/contacts")(app);
-    const notesRoutes = require("./api/notes")(app);
+const router = require("express").Router();
+const apiRoutes = require("./api");
 
-    // app.use("/contacts", contactRoutes);
-    router.route("/notes", notesRoutes);
+// Contact routes
+router.use("/api", apiRoutes);
 
-    return router
-}
+module.exports = router;
