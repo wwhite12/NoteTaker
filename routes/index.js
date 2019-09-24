@@ -1,7 +1,9 @@
-const router = require("express").Router();
-const apiRoutes = require("./api");
+module.exports = (app, router) => {
+    // const contactRoutes = require("./api/contacts")(app);
+    const notesRoutes = require("./api/notes")(app);
 
-// Contact routes
-router.use("/api", apiRoutes);
+    // app.use("/contacts", contactRoutes);
+    router.route("/notes", notesRoutes);
 
-module.exports = router;
+    return router
+}
