@@ -1,5 +1,6 @@
 import React from "react";
-import contacts from "./contacts.json";
+import API from "../utils/API";
+//import contacts from "./contacts.json";
 import ContactCard from "./ContactCard";
 import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } from "mdbreact";
 import { MDBJumbotron } from "mdbreact";
@@ -14,10 +15,12 @@ class ContactList extends React.Component {
   constructor() {
     super();
     this.state = {
-      contacts: [...contacts],
+      contacts: [],
       notes,
-      contact: { ...contacts[0] },
-      isFlipped: false
+      contact: [],
+      isFlipped: false,
+      currentObjectId: "",
+      currentNotes: []
 
     };
     this.handleClick = this.handleClick.bind(this);
@@ -38,10 +41,44 @@ class ContactList extends React.Component {
   }
 
 
-  ViewContact = id => {
-    const contact = this.state.contacts[id];
-    this.setState({ contact })
+  componentDidMount() {
+    this.loadContacts();
+    //    ViewContact = id => {
+    //      const contact = this.state.contacts[id];
+    //      this.setState({ contact })
+    //}
   }
+
+  loadContacts = () => {
+    API.getContacts()
+      .then(res => {
+        console.log(res.data)
+        this.setState({ contacts: res.data })
+        this.setState({ contact: res.data[0] })
+
+
+      }
+
+      )
+
+
+      .catch(err => console.log(err));
+
+  }
+
+  ViewContact = key => {
+    const contact = this.state.contacts[key];
+    const id = this.state.contacts[key]["_id"];
+    this.setState({ contact })
+    this.setState({ currentObjectId: id })
+    API.getContact(id).then(res => {
+      const notes = res.data.notes
+      this.setState({ currentNotes: notes })
+    })
+  }
+
+
+
 
   render() {
 
@@ -107,7 +144,7 @@ class ContactList extends React.Component {
                               <MDBCol id="notes-list" md="12">
                                 <div className="md-form mb-0">
                                   <MDBTable bordered scrollY maxHeight="300px">
-                                    {this.state.notes.map((note, index) => (
+                                    {this.state.currentNotes.map((note, index) => (
                                       <NoteCard
                                         key={index}
                                         id={note.id}
@@ -219,24 +256,8 @@ class ContactList extends React.Component {
         </ReactCardFlip>
       </div>
     );
-  }
+  };
+
+
 }
 export default ContactList
-
-
-// "firstName": "Horacio",
-//         "lastName": "Garcia",
-//         "company": "Clear Glass Installers",
-//         "streetAddress": "5000 Grand Canyon Lane",
-//         "city": "Fairburn",
-//         "state": "GA",
-//         "zip": "33333",
-//         "country": "USA",
-//         "email": "jeff.simmons@clearglassinstallers.com",
-//         "phone": "404-505-2222",
-//         "interest": "Hiking",
-//         "avatar":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDvCN2QSUcj-OpLx1-Oi1usgyUwcMYo5CMRQmflBsxZ4EIye6G"
-
-
-
-

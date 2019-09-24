@@ -22,7 +22,7 @@ const contactSchema = new Schema({
             ref: "Note"
         }
     ]
-    
+
 });
 
 const Contact = mongoose.model("Contact", contactSchema);
