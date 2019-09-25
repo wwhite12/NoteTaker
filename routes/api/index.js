@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const contactRoutes = require("./contacts");
-const notesRoutes = require("./notes");
+const noteRoutes = require("./notes");
+const authenticationRoutes = require("./authentication");
 
-// Contact routes
+router.use("/authentication", authenticationRoutes);
 router.use("/contacts", contactRoutes);
-router.use("/notes", notesRoutes);
+router.use("/notes", noteRoutes);
+
 
 module.exports = router;

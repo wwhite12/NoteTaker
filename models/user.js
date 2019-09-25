@@ -7,7 +7,6 @@ const bcrypt = require("bcryptjs");
 // Using the Schema constructor, create a new NoteSchema object
 
 const UserSchema = new mongoose.Schema({
-  userId: Number,
   username: {
     type: String,
     index: {
