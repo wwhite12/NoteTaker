@@ -9,8 +9,10 @@
     "mdbreact": "^4.20.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-flippy": "^0.1.5",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "^2.1.1"
+    "react-scripts": "^2.1.1",
+    "react-toggle-display": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

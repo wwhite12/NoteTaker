@@ -5,7 +5,7 @@ const authenticationRoutes = require("./authentication");
 
 router.use("/authentication", authenticationRoutes);
 router.use("/contacts", contactRoutes);
-router.use("/notes", noteRoutes);
+// router.use("/notes", notesRoutes);
 
 
 module.exports = router;
