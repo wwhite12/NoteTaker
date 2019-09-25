@@ -14,9 +14,10 @@ class ImageUpload extends React.Component {
     }
 
     addNoteHandler = () => {
+        console.log(this.state.file)
         fetch('/notes/convert', {
             method: 'POST',
-            body: {}
+            body: {image: this.state.file}
         })
             .then(res => console.log(res))
             .catch(err => console.log(err))
@@ -45,7 +46,7 @@ class ImageUpload extends React.Component {
       if (imagePreviewUrl) {
         $imagePreview = (<img src={imagePreviewUrl} />);
       } else {
-        $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+        $imagePreview = (<div className="previewText"></div>);
       }
   
       return (
@@ -56,7 +57,7 @@ class ImageUpload extends React.Component {
               onChange={(e)=>this._handleImageChange(e)} />
             <button className="submitButton" 
               type="submit" 
-              onClick={(e)=>this.addNoteHandler()}>Upload Image</button>
+              onClick={()=>this.addNoteHandler()}>Convert Notes</button>
           </form>
           <div className="imgPreview">
             {$imagePreview}

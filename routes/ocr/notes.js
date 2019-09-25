@@ -2,6 +2,7 @@ module.exports = function (app) {
 
     app.post("/notes/convert", function (req, res) {
         console.log('********* hit')
+        
 
 
         const vision = require('@google-cloud/vision');

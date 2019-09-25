@@ -12,21 +12,25 @@ function NewNote() {
             .catch(err => console.log(err))
     }
 
-    return (
-        <>
+    //return (
 
-            <MDBCol md="6">
 
-                <div className="text-center text-md-left">
 
-                     <MDBBtn color="primary" size="md" onClick={addNoteHandler}>
-                        Add Note
-                    </MDBBtn>
-                </div>
 
-            </MDBCol>
-        </>
-    )
+        //<>
+
+          //  <MDBCol md="6">
+
+            //    <div className="text-center text-md-left">
+
+              //       <MDBBtn color="primary" size="md" onClick={addNoteHandler}>
+                //        Add Note
+                  //  </MDBBtn>
+                //</div>
+
+           // </MDBCol>
+        //</>
+    //)
 
 
 
