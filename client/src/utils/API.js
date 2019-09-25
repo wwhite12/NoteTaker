@@ -17,11 +17,28 @@ export default {
     saveContact: function (contactData) {
         return axios.post("/api/contacts", contactData);
     },
+    // Updates a contact to the database
+    updateContact: function (id, contactData) {
+        return axios.put("/api/contacts/" + id, contactData);
+    },
     // Gets all notes
     getNotes: function () {
         return axios.get("/api/notes");
     },
     getNote: function (id) {
-        return axios.get("/api/notes" + id);
+        return axios.get("/api/notes/" + id);
+    },
+    // Deletes the contacts with the given id
+    deleteNote: function (id) {
+        return axios.delete("/api/notes/" + id);
+    },
+    // Saves a contacts to the database
+    saveNote: function (noteData) {
+        return axios.post("/api/notes", noteData);
+    },
+    // Updates a contact to the database
+    updateNote: function (id, noteData) {
+        return axios.put("/api/notes/" + id, noteData);
     }
+
 };

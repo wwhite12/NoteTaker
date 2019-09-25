@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import {
-MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBFormInline,
-MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem} from "mdbreact";
+  MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBFormInline,
+  MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem
+} from "mdbreact";
 import "./NavStyle.css"
 
 
@@ -12,10 +13,11 @@ class Nav extends React.Component {
     username: "",
     isOpen: false
   };
-  
+
   toggleCollapse = () => {
     this.setState({ isOpen: !this.state.isOpen });
   }
+
 
   
   render () {
@@ -47,9 +49,9 @@ class Nav extends React.Component {
     </MDBCollapse>
   </MDBNavbar>
 
-  )
 
-}
+  )
+  }
 }
 export default Nav;
 
