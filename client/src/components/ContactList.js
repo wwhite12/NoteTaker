@@ -199,7 +199,6 @@ class ContactList extends React.Component {
 
       API.updateContact(id, contactData).then(res => {
         console.log(res.data)
-        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
         this.setState({
           firstName: res.data["firstName"],
           lastName: res.data["lastName"],
@@ -213,9 +212,11 @@ class ContactList extends React.Component {
           phone: res.data["phone"],
           interest: res.data["interest"],
           notes: res.data["notes"],
-          currentNotes: ["notes"]
+          currentNotes: res.data["notes"]
         })
-        this.setState({ contact: contactData })
+
+        this.setState({ contact: res.data })
+        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
 
         API.getContacts()
