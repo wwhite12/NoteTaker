@@ -6,7 +6,6 @@ import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } fro
 import { MDBJumbotron } from "mdbreact";
 import NoteCard from "./NoteCard";
 import NewNoteButton from "./NewNoteButton";
-import notes from "./notes.json";
 import ReactCardFlip from 'react-card-flip';
 
 
@@ -16,19 +15,51 @@ class ContactList extends React.Component {
     super();
     this.state = {
       contacts: [],
-      notes,
+      notes: [],
       contact: [],
       isFlipped: false,
       currentObjectId: "",
-      currentNotes: []
-
+      currentNotes: [],
+      firstName: "",
+      lastName: "",
+      company: "",
+      streetAddress: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "USA",
+      email: "",
+      phone: "",
+      interest: ""
     };
+
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(e) {
     e.preventDefault();
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+  }
+
+  addContact = (e) => {
+    e.preventDefault();
+    this.setState({
+      firstName: "",
+      lastName: "",
+      company: "",
+      streetAddress: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "",
+      email: "",
+      phone: "",
+      interest: ""
+    });
+    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+
+
   }
 
   changeContact = (e, value) => {
@@ -43,10 +74,6 @@ class ContactList extends React.Component {
 
   componentDidMount() {
     this.loadContacts();
-    //    ViewContact = id => {
-    //      const contact = this.state.contacts[id];
-    //      this.setState({ contact })
-    //}
   }
 
   loadContacts = () => {
@@ -55,12 +82,21 @@ class ContactList extends React.Component {
         console.log(res.data)
         this.setState({ contacts: res.data })
         this.setState({ contact: res.data[0] })
-
-
+        this.setState({
+          firstName: res.data[0]["firstName"],
+          lastName: res.data[0]["lastName"],
+          company: res.data[0]["company"],
+          streetAddress: res.data[0]["streetAddress"],
+          city: res.data[0]["city"],
+          state: res.data[0]["state"],
+          zip: res.data[0]["zip"],
+          country: res.data[0]["country"],
+          email: res.data[0]["email"],
+          phone: res.data[0]["phone"],
+          interest: res.data[0]["interest"]
+        });
       }
-
       )
-
 
       .catch(err => console.log(err));
 
@@ -77,6 +113,98 @@ class ContactList extends React.Component {
     })
   }
 
+  handleInputChange = event => {
+    const { value, name } = event.target;
+
+    this.setState({
+      [name]: value
+
+    });
+
+  };
+
+  saveContact = event => {
+    const contactData = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      company: this.state.company,
+      streetAddress: this.state.streetAddress,
+      city: this.state.city,
+      state: this.state.state,
+      zip: this.state.zip,
+      country: this.state.country,
+      email: this.state.email,
+      phone: this.state.phone,
+      interest: this.state.interest
+
+    }
+    API.saveContact(contactData).then(res => {
+      console.log(res.data)
+      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+      this.setState({ contact: res.data })
+      this.setState({
+        firstName: res.data["firstName"],
+        lastName: res.data["lastName"],
+        company: res.data["company"],
+        streetAddress: res.data["streetAddress"],
+        city: res.data["city"],
+        state: res.data["state"],
+        zip: res.data["zip"],
+        notes: [],
+        country: res.data["country"],
+        email: res.data["email"],
+        phone: res.data["phone"],
+        interest: res.data["interest"]
+      })
+
+      API.getContacts()
+        .then(res => {
+          console.log(res.data)
+          this.setState({ contacts: res.data })
+
+
+
+
+        }
+        )
+        .catch(err => console.log(err));
+
+    });
+
+  }
+
+  deleteContact = () => {
+    const id = this.state.currentObjectId;
+    console.log(id);
+    API.deleteContact(id).then(() => {
+    });
+    API.getContacts()
+      .then(res => {
+        console.log(res.data)
+        const previous = res.data.length - 1
+        this.setState({ contact: res.data[previous] })
+        this.setState({ contacts: res.data })
+        this.setState({
+          firstName: res.data[previous]["firstName"],
+          lastName: res.data[previous]["lastName"],
+          company: res.data[previous]["company"],
+          streetAddress: res.data[previous]["streetAddress"],
+          city: res.data[previous]["city"],
+          state: res.data[previous]["state"],
+          zip: res.data[previous]["zip"],
+          notes: [],
+          country: res.data[previous]["country"],
+          email: res.data[previous]["email"],
+          phone: res.data[previous]["phone"],
+          interest: res.data[previous]["interest"]
+        })
+
+      }
+      )
+
+      .catch(err => console.log(err));
+
+  }
 
 
 
@@ -86,7 +214,7 @@ class ContactList extends React.Component {
 
       <div>
         <div className="sidebar" style={{ marginTop: "6%" }}>
-          <button type="button" className="btn btn-primary">Add contact</button>
+          <button onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
           <MDBTable scrollY maxHeight="100%" style={{ marginTop: "0px" }}>
             <div className="list-group">
               {this.state.contacts.map((contact, index) => (
@@ -115,7 +243,10 @@ class ContactList extends React.Component {
                       <div className="text-md-right">
 
                         <MDBBtn onClick={this.handleClick} color="primary" size="md">
-                          Edit customer
+                          Edit Contact
+                  </MDBBtn>
+                        <MDBBtn onClick={this.deleteContact} color="primary" size="md">
+                          Delete Contact
                   </MDBBtn>
                       </div>
                       <h2 className="h1-responsive font-weight-bold text-center my-5">
@@ -195,7 +326,7 @@ class ContactList extends React.Component {
               <div className="row">
                 <div className="col">
                   <div className="text-md-right">
-                    <MDBBtn onClick={this.handleClick} color="primary" size="md">
+                    <MDBBtn onClick={this.saveContact} color="primary" size="md">
                       Save
                     </MDBBtn>
                   </div>
@@ -203,45 +334,52 @@ class ContactList extends React.Component {
                     <div className="form-row">
                       <div className="form-group col-md-6">
                         <label for="input-first-name">First Name</label>
-                        <input id={this.state.contact.id} value={this.state.contact.firstName} onChange={(e) => this.changeContact(e.target.value)} type="text" className="form-control" />
+                        <input type="text" value={this.state.firstName} name="firstName" onChange={this.handleInputChange} className="form-control" />
+
                       </div>
                       <div className="form-group col-md-6">
                         <label for="input-last-name">Last Name</label>
-                        <input value={this.state.contact.lastName} type="text" className="form-control" />
+                        <input type="text" value={this.state.lastName} name="lastName" onChange={this.handleInputChange} className="form-control" />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group col-md-12">
+                        <label for="input-last-name">Company</label>
+                        <input type="text" value={this.state.company} name="company" onChange={this.handleInputChange} className="form-control" />
                       </div>
                     </div>
                     <div className="form-group">
-                      <label for="input-address">Address</label>
-                      <input value={this.state.contact.streetAddress} type="text" className="form-control" />
+                      <label for="input-address"> Street Address</label>
+                      <input type="text" value={this.state.streetAddress} name="streetAddress" onChange={this.handleInputChange} className="form-control" />
                     </div>
                     <div className="form-row">
                       <div className="form-group col-md-6">
                         <label for="input-city">City</label>
-                        <input value={this.state.contact.city} type="text" className="form-control" />
+                        <input type="text" value={this.state.city} name="city" onChange={this.handleInputChange} className="form-control" />
                       </div>
                       <div className="form-group col-md-4">
                         <label for="input-state">State</label>
-                        <input value={this.state.contact.state} type="text" className="form-control" />
+                        <input type="text" value={this.state.state} name="state" onChange={this.handleInputChange} className="form-control" />
                       </div>
                       <div className="form-group col-md-2">
                         <label for="input-zip">Zip</label>
-                        <input value={this.state.contact.zip} type="text" className="form-control" id="inputZip" />
+                        <input type="text" value={this.state.zip} name="zip" onChange={this.handleInputChange} className="form-control" />
                       </div>
                     </div>
                     <div className="form-row">
                       <div className="form-group col-md-6">
                         <label for="input-email">Email</label>
-                        <input value={this.state.contact.email} type="text" className="form-control" />
+                        <input type="text" value={this.state.email} name="email" onChange={this.handleInputChange} className="form-control" />
                       </div>
                       <div className="form-group col-md-6">
                         <label for="input-phone">Phone Number</label>
-                        <input value={this.state.contact.phone} type="text" className="form-control" />
+                        <input type="text" value={this.state.phone} name="phone" onChange={this.handleInputChange} className="form-control" />
                       </div>
                     </div>
                     <div className="form-row">
                       <div className="form-group col-md-6">
-                        <label for="input-interest">interest</label>
-                        <input value={this.state.contact.interest} type="text" className="form-control" />
+                        <label for="input-interest">Personal Interest</label>
+                        <input type="text" value={this.state.interest} name="interest" onChange={this.handleInputChange} className="form-control" />
                       </div>
                       {/* <div className="form-group col-md-6">
                         <label for="avatar">Avatar</label>
@@ -254,7 +392,7 @@ class ContactList extends React.Component {
             </div>
           </div>
         </ReactCardFlip>
-      </div>
+      </div >
     );
   };
 
