@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from 'react';
 import API from "../utils/API";
 //import contacts from "./contacts.json";
 import ContactCard from "./ContactCard";
@@ -8,6 +8,7 @@ import NoteCard from "./NoteCard";
 import NewNoteButton from "./NewNoteButton";
 import notes from "./notes.json";
 import ReactCardFlip from 'react-card-flip';
+import ToggleDisplay from 'react-toggle-display';
 
 
 class ContactList extends React.Component {
@@ -20,11 +21,21 @@ class ContactList extends React.Component {
       contact: [],
       isFlipped: false,
       currentObjectId: "",
-      currentNotes: []
+      currentNotes: [],
+      show: true
 
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
+
+  handleClickNote() {
+    this.setState({
+      show: !this.state.show
+    });
+  }
+
+  
 
   handleClick(e) {
     e.preventDefault();
@@ -84,7 +95,21 @@ class ContactList extends React.Component {
 
     return (
 
-      <div>
+
+
+ <div className="App">
+        <p className="App-intro">
+          <button onClick={ () => this.handleClickNote() }>Toggle things</button>
+        </p>
+        <ToggleDisplay show={this.state.show}>
+
+       
+
+
+        </ToggleDisplay>
+ 
+        <ToggleDisplay if={this.state.show} tag="section">
+        <div>
         <div className="sidebar" style={{ marginTop: "6%" }}>
           <button type="button" className="btn btn-primary">Add contact</button>
           <MDBTable scrollY maxHeight="100%" style={{ marginTop: "0px" }}>
@@ -255,6 +280,24 @@ class ContactList extends React.Component {
           </div>
         </ReactCardFlip>
       </div>
+
+
+
+
+
+
+
+
+        </ToggleDisplay>
+      </div>
+
+
+
+
+
+
+
+      
     );
   };
 
