@@ -177,11 +177,29 @@ class ContactList extends React.Component {
     const id = this.state.currentObjectId;
     console.log(id);
     API.deleteContact(id).then(() => {
+      this.setState({
+        firstName: "",
+        lastName: "",
+        company: "",
+        streetAddress: "",
+        city: "",
+        state: "",
+        zip: "",
+        notes: [],
+        country: "",
+        email: "",
+        phone: "",
+        interest: ""
+      })
+      this.setState({ contact: [] })
+
+
     });
     API.getContacts()
       .then(res => {
         console.log(res.data)
-        const previous = res.data.length - 1
+        let previous = res.data.length - 1;
+        console.log(previous)
         this.setState({ contact: res.data[previous] })
         this.setState({ contacts: res.data })
         this.setState({
@@ -198,6 +216,8 @@ class ContactList extends React.Component {
           phone: res.data[previous]["phone"],
           interest: res.data[previous]["interest"]
         })
+        this.setState({ currentObjectId: res.data[previous]["_id"] })
+
 
       }
       )
