@@ -15,7 +15,7 @@ class ImageUpload extends React.Component {
 
     addNoteHandler = () => {
         console.log(this.state.file)
-        fetch('/notes/convert', {
+        fetch('/ocr/convert', {
             method: 'POST',
             body: {image: this.state.file}
         })
