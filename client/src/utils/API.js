@@ -17,6 +17,10 @@ export default {
     saveContact: function (contactData) {
         return axios.post("/api/contacts", contactData);
     },
+    // Updates a contact to the database
+    updateContact: function (id, contactData) {
+        return axios.put("/api/contacts/" + id, contactData);
+    },
     // Gets all notes
     getNotes: function () {
         return axios.get("/api/notes");

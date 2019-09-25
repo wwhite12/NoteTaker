@@ -42,35 +42,6 @@ class ContactList extends React.Component {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
   }
 
-  addContact = (e) => {
-    e.preventDefault();
-    this.setState({
-      firstName: "",
-      lastName: "",
-      company: "",
-      streetAddress: "",
-      city: "",
-      state: "",
-      zip: "",
-      country: "",
-      email: "",
-      phone: "",
-      interest: ""
-    });
-    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-
-
-  }
-
-  changeContact = (e, value) => {
-    let contacts = [...this.state.contacts];
-    let contact = { ...contacts[0] }
-    contact.firstName = value;
-    contacts[0] = contact;
-    this.setState({ contacts });
-    this.setState({ contact: contact });
-  }
-
 
   componentDidMount() {
     this.loadContacts();
@@ -102,15 +73,49 @@ class ContactList extends React.Component {
 
   }
 
+
+  addContact = (e) => {
+    e.preventDefault();
+    this.setState({
+      firstName: "",
+      lastName: "",
+      company: "",
+      streetAddress: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "",
+      email: "",
+      phone: "",
+      interest: "",
+      currentObjectId: ""
+    });
+    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+
+
+  }
+
+
+
   ViewContact = key => {
-    const contact = this.state.contacts[key];
-    const id = this.state.contacts[key]["_id"];
-    this.setState({ contact })
+    const id = this.state.contacts[key]["_id"]
+    this.setState({ contact: this.state.contacts[key] })
     this.setState({ currentObjectId: id })
-    API.getContact(id).then(res => {
-      const notes = res.data.notes
-      this.setState({ currentNotes: notes })
+    this.setState({
+      firstName: this.state.contacts[key]["firstName"],
+      lastName: this.state.contacts[key]["lastName"],
+      company: this.state.contacts[key]["company"],
+      streetAddress: this.state.contacts[key]["streetAddress"],
+      city: this.state.contacts[key]["city"],
+      state: this.state.contacts[key]["state"],
+      zip: this.state.contacts[key]["zip"],
+      notes: this.state.contacts[key]["notes"],
+      country: this.state.contacts[key]["country"],
+      email: this.state.contacts[key]["email"],
+      phone: this.state.contacts[key]["phone"],
+      interest: this.state.contacts[key]["interest"]
     })
+
   }
 
   handleInputChange = event => {
@@ -124,52 +129,97 @@ class ContactList extends React.Component {
   };
 
   saveContact = event => {
-    const contactData = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      company: this.state.company,
-      streetAddress: this.state.streetAddress,
-      city: this.state.city,
-      state: this.state.state,
-      zip: this.state.zip,
-      country: this.state.country,
-      email: this.state.email,
-      phone: this.state.phone,
-      interest: this.state.interest
+
+    if (this.state.currentObjectId === "") {
+      const contactData = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        company: this.state.company,
+        streetAddress: this.state.streetAddress,
+        city: this.state.city,
+        state: this.state.state,
+        zip: this.state.zip,
+        country: this.state.country,
+        email: this.state.email,
+        phone: this.state.phone,
+        interest: this.state.interest
+
+      }
+      API.saveContact(contactData).then(res => {
+        console.log(res.data)
+        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+        this.setState({ contact: res.data })
+        this.setState({
+          firstName: res.data["firstName"],
+          lastName: res.data["lastName"],
+          company: res.data["company"],
+          streetAddress: res.data["streetAddress"],
+          city: res.data["city"],
+          state: res.data["state"],
+          zip: res.data["zip"],
+          notes: [],
+          country: res.data["country"],
+          email: res.data["email"],
+          phone: res.data["phone"],
+          interest: res.data["interest"]
+        })
+
+        API.getContacts()
+          .then(res => {
+            console.log(res.data)
+            this.setState({ contacts: res.data })
+          })
+          .catch(err => console.log(err));
+
+      });
+
+    } else {
+      const contactData = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        company: this.state.company,
+        streetAddress: this.state.streetAddress,
+        city: this.state.city,
+        state: this.state.state,
+        zip: this.state.zip,
+        country: this.state.country,
+        email: this.state.email,
+        phone: this.state.phone,
+        interest: this.state.interest
+      }
+      const id = this.state.currentObjectId;
+      console.log(id)
+
+      API.updateContact(id, contactData).then(res => {
+        console.log(res.data)
+        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+        this.setState({
+          firstName: res.data["firstName"],
+          lastName: res.data["lastName"],
+          company: res.data["company"],
+          streetAddress: res.data["streetAddress"],
+          city: res.data["city"],
+          state: res.data["state"],
+          zip: res.data["zip"],
+          notes: [],
+          country: res.data["country"],
+          email: res.data["email"],
+          phone: res.data["phone"],
+          interest: res.data["interest"]
+        })
+        this.setState({ contact: contactData })
+
+
+        API.getContacts()
+          .then(res => {
+            console.log(res.data)
+            this.setState({ contacts: res.data })
+          })
+          .catch(err => console.log(err));
+
+      });
 
     }
-    API.saveContact(contactData).then(res => {
-      console.log(res.data)
-      this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-      this.setState({ contact: res.data })
-      this.setState({
-        firstName: res.data["firstName"],
-        lastName: res.data["lastName"],
-        company: res.data["company"],
-        streetAddress: res.data["streetAddress"],
-        city: res.data["city"],
-        state: res.data["state"],
-        zip: res.data["zip"],
-        notes: [],
-        country: res.data["country"],
-        email: res.data["email"],
-        phone: res.data["phone"],
-        interest: res.data["interest"]
-      })
-
-      API.getContacts()
-        .then(res => {
-          console.log(res.data)
-          this.setState({ contacts: res.data })
-
-
-
-
-        }
-        )
-        .catch(err => console.log(err));
-
-    });
 
   }
 
@@ -227,6 +277,12 @@ class ContactList extends React.Component {
   }
 
 
+  editContact = () => {
+    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+
+
+  }
+
 
   render() {
 
@@ -262,7 +318,7 @@ class ContactList extends React.Component {
                     <MDBJumbotron fluid>
                       <div className="text-md-right">
 
-                        <MDBBtn onClick={this.handleClick} color="primary" size="md">
+                        <MDBBtn onClick={this.editContact} color="primary" size="md">
                           Edit Contact
                   </MDBBtn>
                         <MDBBtn onClick={this.deleteContact} color="primary" size="md">
