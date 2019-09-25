@@ -5,6 +5,7 @@ module.exports = {
     findAll: function (req, res) {
         db.Contact
             .find(req.query)
+            .populate("notes")
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },

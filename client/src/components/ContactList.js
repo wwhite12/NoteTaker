@@ -34,13 +34,8 @@ class ContactList extends React.Component {
     };
 
 
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(e) {
-    e.preventDefault();
-    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-  }
 
 
   componentDidMount() {
@@ -64,9 +59,14 @@ class ContactList extends React.Component {
           country: res.data[0]["country"],
           email: res.data[0]["email"],
           phone: res.data[0]["phone"],
-          interest: res.data[0]["interest"]
+          interest: res.data[0]["interest"],
+          notes: res.data[0]["notes"],
+          currentNotes: res.data[0]["notes"],
+          currentObjectId: res.data[0]["_id"]
         });
+        console.log(this.state.currentObjectId)
       }
+
       )
 
       .catch(err => console.log(err));
@@ -101,21 +101,25 @@ class ContactList extends React.Component {
     const id = this.state.contacts[key]["_id"]
     this.setState({ contact: this.state.contacts[key] })
     this.setState({ currentObjectId: id })
-    this.setState({
-      firstName: this.state.contacts[key]["firstName"],
-      lastName: this.state.contacts[key]["lastName"],
-      company: this.state.contacts[key]["company"],
-      streetAddress: this.state.contacts[key]["streetAddress"],
-      city: this.state.contacts[key]["city"],
-      state: this.state.contacts[key]["state"],
-      zip: this.state.contacts[key]["zip"],
-      notes: this.state.contacts[key]["notes"],
-      country: this.state.contacts[key]["country"],
-      email: this.state.contacts[key]["email"],
-      phone: this.state.contacts[key]["phone"],
-      interest: this.state.contacts[key]["interest"]
-    })
+    API.getContact(id).then(res => {
+      console.log(res.data)
+      this.setState({
+        firstName: res.data["firstName"],
+        lastName: res.data["lastName"],
+        company: res.data["company"],
+        streetAddress: res.data["streetAddress"],
+        city: res.data["city"],
+        state: res.data["state"],
+        zip: res.data["zip"],
+        notes: res.data["notes"],
+        country: res.data["country"],
+        email: res.data["email"],
+        phone: res.data["phone"],
+        interest: res.data["interest"],
+        currentNotes: res.data["notes"]
+      })
 
+    })
   }
 
   handleInputChange = event => {
@@ -161,7 +165,10 @@ class ContactList extends React.Component {
           country: res.data["country"],
           email: res.data["email"],
           phone: res.data["phone"],
-          interest: res.data["interest"]
+          interest: res.data["interest"],
+          currentObjectId: res.data["_id"],
+          notes: res.data["notes"],
+          currentNotes: res.data["notes"]
         })
 
         API.getContacts()
@@ -201,11 +208,12 @@ class ContactList extends React.Component {
           city: res.data["city"],
           state: res.data["state"],
           zip: res.data["zip"],
-          notes: [],
           country: res.data["country"],
           email: res.data["email"],
           phone: res.data["phone"],
-          interest: res.data["interest"]
+          interest: res.data["interest"],
+          notes: res.data["notes"],
+          currentNotes: ["notes"]
         })
         this.setState({ contact: contactData })
 
@@ -260,11 +268,12 @@ class ContactList extends React.Component {
           city: res.data[previous]["city"],
           state: res.data[previous]["state"],
           zip: res.data[previous]["zip"],
-          notes: [],
+          notes: res.data[previous]["notes"],
           country: res.data[previous]["country"],
           email: res.data[previous]["email"],
           phone: res.data[previous]["phone"],
-          interest: res.data[previous]["interest"]
+          interest: res.data[previous]["interest"],
+          currentNotes: res.data[previous]["notes"]
         })
         this.setState({ currentObjectId: res.data[previous]["_id"] })
 
