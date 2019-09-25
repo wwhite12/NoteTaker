@@ -14,6 +14,7 @@ import {
   MDBDropdownItem
 } from "mdbreact";
 import "./NavStyle.css";
+import Auth from "../../utils/Auth";
 import UserContext from "../../context/UserContext";
 
 class Nav extends React.Component {
@@ -63,7 +64,9 @@ class Nav extends React.Component {
                 <UserContext.Consumer>
                   {context => 
                     <>
+                    
                       <a id="loggedInAs">Logged in as: {this.state.username}</a>
+
                     </>
                   }
                 </UserContext.Consumer>

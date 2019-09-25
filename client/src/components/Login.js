@@ -7,7 +7,7 @@ import "./LoginStyle.css"
 
 
 
-class Login extends React.Component {
+class Login extends Component {
   static contextType = UserContext;
 
     state = {
@@ -33,9 +33,9 @@ class Login extends React.Component {
         const {username, password} = this.state;
         
         if (username && password) {
-          console.log("Got It!");
           Auth.logIn(username, password, (response) => {
             this.context.setUser(response);
+            console.log(this.context.response);
             this.props.history.push("/homePage");
           })
         } else {
