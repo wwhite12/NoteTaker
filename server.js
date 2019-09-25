@@ -10,7 +10,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+require("./routes/ocr/ocr")(app);
 app.use(routes);
+
+
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/app_db", { useNewUrlParser: true });
 
