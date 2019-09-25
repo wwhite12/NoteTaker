@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from 'react';
 import API from "../utils/API";
 //import contacts from "./contacts.json";
 import ContactCard from "./ContactCard";
@@ -7,6 +7,7 @@ import { MDBJumbotron } from "mdbreact";
 import NoteCard from "./NoteCard";
 import NewNoteButton from "./NewNoteButton";
 import ReactCardFlip from 'react-card-flip';
+import ToggleDisplay from 'react-toggle-display';
 import ImageUpload from './AddNoteBtn';
 
 
@@ -21,6 +22,7 @@ class ContactList extends React.Component {
       isFlipped: false,
       currentObjectId: "",
       currentNotes: [],
+      show: false,
       firstName: "",
       lastName: "",
       company: "",
@@ -35,9 +37,23 @@ class ContactList extends React.Component {
     };
 
 
+
   }
 
 
+
+  handleClickNote() {
+    this.setState({
+      show: !this.state.show
+    });
+  }
+
+  
+
+  handleClick(e) {
+    e.preventDefault();
+    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+  }
 
   componentDidMount() {
     this.loadContacts();
@@ -299,7 +315,57 @@ class ContactList extends React.Component {
 
     return (
 
-      <div>
+
+
+ <div className="App">
+        <p className="App-intro">
+        
+        </p>
+        <ToggleDisplay show={this.state.show}>
+
+      <div className="container">
+        <div className="row">
+          <div className="col">
+
+
+
+
+
+
+          <form>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Note title</label>
+    <MDBInput type="textarea" label="Example label" outline />
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">ImageUpload</label>
+    <ImageUpload /> 
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect2">Note Body</label>
+    <MDBInput type="textarea" label="Example label" outline />
+  </div>
+  <button onClick={ () => this.handleClickNote() } name="addContact" type="button" className="btn btn-primary">save</button>
+</form>
+            
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+        
+
+
+
+
+
+        </ToggleDisplay>
+
+        <ToggleDisplay if={!this.state.show} tag="section">
+        <div>
         <div className="sidebar" style={{ marginTop: "6%" }}>
           <button onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
           <MDBTable scrollY maxHeight="100%" style={{ marginTop: "0px" }}>
@@ -353,7 +419,9 @@ class ContactList extends React.Component {
                             <MDBRow>
                               <MDBCol>
                                 <div className="mb-0">
-                             <ImageUpload /> 
+                      
+                                <button onClick={ () => this.handleClickNote() } name="addContact" type="button" className="btn btn-primary">Add contact</button>
+                               
                                   
                                 </div>
                               </MDBCol>
@@ -480,7 +548,9 @@ class ContactList extends React.Component {
             </div>
           </div>
         </ReactCardFlip>
-      </div >
+        </div>
+        </ToggleDisplay>
+        </div>
     );
   };
 
