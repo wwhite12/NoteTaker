@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } from "mdbreact";
+import {MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } from "mdbreact";
 
 function NewNote() {
 
@@ -18,7 +18,8 @@ function NewNote() {
             <MDBCol md="6">
 
                 <div className="text-center text-md-left">
-                    <MDBBtn color="primary" size="md" onClick={addNoteHandler}>
+
+                     <MDBBtn color="primary" size="md" onClick={addNoteHandler}>
                         Add Note
                     </MDBBtn>
                 </div>

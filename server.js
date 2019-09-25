@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const router = express.Router();
+const routes = require("./routes");
 
 const path = require("path");
 const mongoose = require("mongoose");
@@ -14,7 +14,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-require("./routes/api/notes")(app);
+require("./routes/ocr/notes")(app);
+app.use(routes);
+
+
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/app_db", { useNewUrlParser: true });
 

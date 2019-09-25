@@ -7,6 +7,7 @@ import NoteCard from "./NoteCard";
 import NewNoteButton from "./NewNoteButton";
 import notes from "./notes.json";
 import ReactCardFlip from 'react-card-flip';
+import ImageUpload from './AddNoteBtn';
 
 
 class ContactList extends React.Component {
@@ -97,8 +98,9 @@ class ContactList extends React.Component {
 
                             <MDBRow>
                               <MDBCol>
-                                <div className="md-form mb-0">
-                                  <NewNoteButton />
+                                <div className="mb-0">
+                             <ImageUpload /> 
+                                  
                                 </div>
                               </MDBCol>
                             </MDBRow>
