@@ -9,7 +9,7 @@ import ToggleDisplay from 'react-toggle-display';
 import ImageUpload from './AddNoteBtn';
 import Nav from "./Nav/Nav";
 import Sidebar from "react-sidebar";
-import  "./ContactListStyle.css"
+import "./ContactListStyle.css"
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 class ContactList extends React.Component {
@@ -60,7 +60,7 @@ class ContactList extends React.Component {
   }
 
   mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false});
+    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
     this.setState(oldState => ({ IsContactListOpen: !oldState.IsContactListOpen }));
   }
 
@@ -246,7 +246,6 @@ class ContactList extends React.Component {
           currentNotes: res.data["notes"]
         })
 
-        this.setState({ contact: res.data })
         this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
 
@@ -254,6 +253,8 @@ class ContactList extends React.Component {
           .then(res => {
             console.log(res.data)
             this.setState({ contacts: res.data })
+            this.setState({ contact: contactData })
+
           })
           .catch(err => console.log(err));
 
@@ -386,11 +387,11 @@ class ContactList extends React.Component {
 
   render() {
     return (
-      <Sidebar  
-        sidebar={<b > 
-          
+      <Sidebar
+        sidebar={<b >
+
           {/* content inside bar */}
-          <button style={{ margin: "10px 5px 1px 30px "},{fontSize:"20px"}} onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
+          <button style={{ margin: "10px 5px 1px 30px " }, { fontSize: "20px" }} onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
           <div className="list-group">
             {this.state.contacts.map((contact, index) => (
               <ContactCard
@@ -408,41 +409,41 @@ class ContactList extends React.Component {
         open={this.state.sidebarOpen}
         docked={this.state.sidebarDocked}
         onSetOpen={this.onSetSidebarOpen}
-        
+
       >
         {/* main content next to side bar */}
         <b>
           <Nav />
           <div className="App" >
-            
-            <div className={this.state.IsContactListOpen  ? "hidden":"open" }>
-            <button 
-             onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">Open Contacts</button>
+
+            <div className={this.state.IsContactListOpen ? "hidden" : "open"}>
+              <button
+                onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">Open Contacts</button>
             </div>
             <p className="App-intro"></p>
             <ToggleDisplay show={this.state.show}>
               <div className="container">
                 <div className="row">
                   <div className="col">
-                  <form>
-                  <div class="form-group">
-                    <label for="exampleFormControlInput1"></label>
-                    <MDBInput type="date" name="createdOn" value={this.state.createdOn} onChange={this.handleInputChange} label="Date" outline />
+                    <form>
+                      <div class="form-group">
+                        <label for="exampleFormControlInput1"></label>
+                        <MDBInput type="date" name="createdOn" value={this.state.createdOn} onChange={this.handleInputChange} label="Date" outline />
 
-                    <label for="exampleFormControlInput1"></label>
-                    <MDBInput type="textarea" value={this.state.noteTitle} name="noteTitle" onChange={this.handleInputChange} label="Note Title" outline />
+                        <label for="exampleFormControlInput1"></label>
+                        <MDBInput type="textarea" value={this.state.noteTitle} name="noteTitle" onChange={this.handleInputChange} label="Note Title" outline />
 
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">ImageUpload</label>
-                    <ImageUpload setConvertedTextState={this.setConvertedTextState} />
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect2"></label>
-                    <MDBInput type="textarea" value={this.state.noteBody} name="noteBody" onChange={this.handleInputChange} label="Note Body" outline />
-                  </div>
-                  <button onClick={() => this.saveNote()} name="addNote" type="button" className="btn btn-primary">Save</button>
-                </form>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleFormControlSelect1">ImageUpload</label>
+                        <ImageUpload setConvertedTextState={this.setConvertedTextState} />
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleFormControlSelect2"></label>
+                        <MDBInput type="textarea" value={this.state.noteBody} name="noteBody" onChange={this.handleInputChange} label="Note Body" outline />
+                      </div>
+                      <button onClick={() => this.saveNote()} name="addNote" type="button" className="btn btn-primary">Save</button>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -493,11 +494,12 @@ class ContactList extends React.Component {
                                             {this.state.currentNotes.map((note, index) => (
                                               <NoteCard
                                                 key={index}
-                                                id={note.id}
-                                                title={note.title}
+                                                id={note._id}
+                                                noteTitle={note.noteTitle}
                                                 noteBody={note.noteBody}
                                                 createdOn={note.createdOn}
-                                                contactRef={note.contactReg}
+                                                deleteNote={this.deleteNote}
+                                                editNote={this.editNote}
                                               />
                                             ))}
                                           </MDBTable>
