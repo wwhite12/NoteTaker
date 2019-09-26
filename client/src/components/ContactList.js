@@ -15,6 +15,7 @@ class ContactList extends React.Component {
 
   constructor() {
     super();
+
     this.state = {
       contacts: [],
       notes: [],
@@ -34,6 +35,7 @@ class ContactList extends React.Component {
       email: "",
       phone: "",
       interest: "",
+      convertedText: "",
       noteTitle: "",
       noteBody: "",
       noteId: "",
@@ -358,6 +360,10 @@ class ContactList extends React.Component {
     }
   }
 
+  setConvertedTextState = text => {
+    this.setState({ convertedText: text })
+  }
+
   deleteNote = (id) => {
     API.deleteNote(id).then(res => {
       API.getContact(this.state.currentObjectId).then(res => {
@@ -412,11 +418,11 @@ class ContactList extends React.Component {
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlSelect1">ImageUpload</label>
-                    <ImageUpload />
+                    <ImageUpload setConvertedTextState={this.setConvertedTextState} />
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlSelect2"></label>
-                    <MDBInput type="textarea" value={this.state.noteBody} name="noteBody" onChange={this.handleInputChange} label="Note Body" outline />
+                    <MDBInput type="textarea" value={this.state.convertedText} name="convertedText" onChange={this.handleInputChange} label="Note Body" outline />
                   </div>
                   <button onClick={() => this.saveNote()} name="addNote" type="button" className="btn btn-primary">Save</button>
                 </form>

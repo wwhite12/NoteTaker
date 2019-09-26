@@ -3,23 +3,30 @@ import React from "react";
 class ImageUpload extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {file: '',imagePreviewUrl: ''};
+      this.state = {
+        uploadedImage: ''
+      };
     }
   
     _handleSubmit(e) {
       e.preventDefault();
       // TODO: do something with -> this.state.file
       console.log('handle uploading-', this.state.file);
-      
     }
 
     addNoteHandler = () => {
         console.log(this.state.file)
         fetch('/ocr/convert', {
             method: 'POST',
-            body: {image: this.state.file}
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              image: this.state.uploadedImage
+            })
         })
-            .then(res => console.log(res))
+            .then(res => res.json())
+            .then(res => this.props.setConvertedTextState(res.message))
             .catch(err => console.log(err))
     }
   
@@ -29,10 +36,9 @@ class ImageUpload extends React.Component {
       let reader = new FileReader();
       let file = e.target.files[0];
   
-      reader.onloadend = () => {
+      reader.onload = (e) => {
         this.setState({
-          file: file,
-          imagePreviewUrl: reader.result
+          uploadedImage: reader.result
         });
       }
   
@@ -41,10 +47,10 @@ class ImageUpload extends React.Component {
   
     render() {
         
-      let {imagePreviewUrl} = this.state;
+      let {uploadedImage} = this.state;
       let $imagePreview = null;
-      if (imagePreviewUrl) {
-        $imagePreview = (<img src={imagePreviewUrl} />);
+      if (uploadedImage) {
+        $imagePreview = (<img src={uploadedImage} />);
       } else {
         $imagePreview = (<div className="previewText"></div>);
       }
@@ -58,6 +64,7 @@ class ImageUpload extends React.Component {
             <button className="submitButton" 
               type="submit" 
               onClick={()=>this.addNoteHandler()}>Convert Notes</button>
+              
           </form>
           <div className="imgPreview">
             {$imagePreview}

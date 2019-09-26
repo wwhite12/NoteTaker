@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+
+// This creates our model from the above schema, using mongoose's model method
+const Schema = mongoose.Schema;
+
 const bcrypt = require("bcryptjs");
 
 // This creates our model from the above schema, using mongoose's model method
+
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -25,4 +30,5 @@ UserSchema.pre("save", function (next) {
 });
 
 // Export the Note model
-module.exports = mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
+module.exports = User;
