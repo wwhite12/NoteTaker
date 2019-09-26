@@ -23,8 +23,19 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
     update: function (req, res) {
+        console.log(req.body)
         db.Contact
-            .findOneAndUpdate({ _id: req.params.id }, req.body)
+            .findOneAndUpdate({ _id: req.params.id },
+                req.body.notes
+                    ? {
+                        $push: {
+                            notes: {
+                                $each: [req.body.notes],
+                                $position: 0
+                            }
+                        }
+                    }
+                    : req.body)
             .populate("notes")
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));

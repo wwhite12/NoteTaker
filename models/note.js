@@ -7,9 +7,9 @@ const Schema = mongoose.Schema;
 
 const NoteSchema = new Schema({
     noteId: String,
-    // contactId: Number,
     noteTitle: String,
     noteBody: String
+
 
 });
 
