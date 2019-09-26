@@ -37,7 +37,8 @@ class ContactList extends React.Component {
       noteTitle: "",
       noteBody: "",
       noteId: "",
-      createdOn: Date.now
+      createdOn: Date.now,
+      username: ""
     };
 
 
@@ -61,6 +62,7 @@ class ContactList extends React.Component {
 
   componentDidMount() {
     this.loadContacts();
+    this.setState({ username: localStorage.getItem("username") })
   }
 
   loadContacts = () => {
