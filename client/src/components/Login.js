@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBModalFooter } from 'mdbreact';
 import "./LoginStyle.css"
 import ReactCardFlip from 'react-card-flip';
 
@@ -66,8 +66,6 @@ class Login extends React.Component {
                                 onChange={this.handleInputChange}
                                 type="email"
                                 label="Your email"
-                                group
-                                type="email"
                                 validate
                                 error="wrong"
                                 success="right"
@@ -78,8 +76,6 @@ class Login extends React.Component {
                                 onChange={this.handleInputChange}
                                 type="password"
                                 label="Your password"
-                                group
-                                type="password"
                                 validate
                                 containerClass="mb-0"
                               />

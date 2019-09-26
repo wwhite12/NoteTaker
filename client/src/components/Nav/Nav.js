@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import {
-  MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBFormInline,
-  MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem
+  MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem,  MDBNavbarToggler, MDBCollapse, MDBFormInline,
 } from "mdbreact";
 import "./NavStyle.css"
 
@@ -37,7 +36,7 @@ class Nav extends React.Component {
       <MDBNavbarNav right>
       <MDBNavItem>
           <MDBFormInline >
-            <a id="loggedInAs">Logged in as: {this.state.username}</a>
+            <p id="loggedInAs">Logged in as: {this.state.username}</p>
           </MDBFormInline>
         </MDBNavItem>
         <MDBNavItem>

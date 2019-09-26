@@ -27,6 +27,7 @@
     "mongoose": "^5.7.1",
     "react-card-flip": "^0.8.1",
     "react-flippy": "^0.1.5",
-    "react-toggle-display": "^2.2.0"
+    "react-toggle-display": "^2.2.0",
+    "rsuite": "^4.0.1"
   }
 }

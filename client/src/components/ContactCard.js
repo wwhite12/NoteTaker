@@ -3,10 +3,9 @@ import React from "react";
 function ContactCard(props) {
     return (
 
-        <button onClick={() => props.ViewContact(props.id)} type="button" className="list-group-item list-group-item-action">
-            <img src={props.avatar} className="rounded-circle" alt="Avatar" width="50" height="50"></img>
-            <p>{props.firstName} {props.lastName}</p>
-            <p>{props.company}</p>
+        <button style={{marginTop:"20px",fontWeight:"bold"}} onClick={() => props.ViewContact(props.id)} type="button" className="list-group-item list-group-item-action">
+            <p> <p style={{fontSize:"24px"}}>{props.firstName} {props.lastName}</p></p>
+            <p><p>{props.company}</p></p>
             <hr />
         </button>
 

@@ -1,21 +1,7 @@
-.sidebar {
-  height: 85%;
-  width: 160px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  padding-top: 16px;
-}
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
+
 #customer-information{
-  margin-top: 10%; 
-  margin-right: 
+  
+ 
 }
 #company-name{
   margin:0 0 0 20px;
@@ -23,3 +9,10 @@
 #notes-list{
   margin-left: 20px;
 }
+.hidden{
+  display:none;
+}
+.open{
+  display: inline;
+}
+    
