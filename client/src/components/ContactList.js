@@ -16,6 +16,7 @@ class ContactList extends React.Component {
 
   constructor() {
     super();
+
     this.state = {
       contacts: [],
       notes: [],
@@ -37,7 +38,12 @@ class ContactList extends React.Component {
       interest: "",
       sidebarDocked: mql.matches,
       sidebarOpen: false,
-      IsContactListOpen: true
+      IsContactListOpen: true,
+      noteTitle: "",
+      noteBody: "",
+      noteId: "",
+      createdOn: Date.now,
+      username: ""
     };
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -76,6 +82,7 @@ class ContactList extends React.Component {
 
   componentDidMount() {
     this.loadContacts();
+    this.setState({ username: localStorage.getItem("username") })
   }
 
   loadContacts = () => {
@@ -100,7 +107,6 @@ class ContactList extends React.Component {
           currentNotes: res.data[0]["notes"],
           currentObjectId: res.data[0]["_id"]
         });
-        console.log(this.state.currentObjectId)
       }
       )
       .catch(err => console.log(err));
@@ -224,7 +230,6 @@ class ContactList extends React.Component {
 
       API.updateContact(id, contactData).then(res => {
         console.log(res.data)
-        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
         this.setState({
           firstName: res.data["firstName"],
           lastName: res.data["lastName"],
@@ -238,9 +243,11 @@ class ContactList extends React.Component {
           phone: res.data["phone"],
           interest: res.data["interest"],
           notes: res.data["notes"],
-          currentNotes: ["notes"]
+          currentNotes: res.data["notes"]
         })
-        this.setState({ contact: contactData })
+
+        this.setState({ contact: res.data })
+        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
 
         API.getContacts()
@@ -304,6 +311,77 @@ class ContactList extends React.Component {
 
   editContact = () => {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+
+  }
+
+
+  saveNote = () => {
+    const noteData = {
+      noteTitle: this.state.noteTitle,
+      noteBody: this.state.noteBody,
+      createdOn: this.state.createdOn
+    }
+
+    if (this.state.noteId === "") {
+
+      API.saveNote(noteData).then(res => {
+        this.setState({
+          show: !this.state.show
+        });
+
+        API.updateContactFromNote(this.state.currentObjectId, res.data._id).then(res => {
+          API.getContact(res.data._id).then(res => {
+            console.log(res.data)
+            this.setState({ contact: res.data })
+            this.setState({ notes: res.data.notes })
+            this.setState({ currentNotes: res.data.notes })
+            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+
+          })
+        })
+      })
+
+
+    } else {
+      API.updateNote(this.state.noteId, noteData).then(res => {
+        this.setState({ show: !this.state.show })
+        API.getContact(this.state.currentObjectId).then(res => {
+          console.log(res.data)
+          this.setState({ contact: res.data })
+          this.setState({ notes: res.data.notes })
+          this.setState({ currentNotes: res.data.notes })
+          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+
+
+        })
+      })
+    }
+  }
+
+  setConvertedTextState = text => {
+    this.setState({ noteBody: text })
+  }
+
+  deleteNote = (id) => {
+    API.deleteNote(id).then(res => {
+      API.getContact(this.state.currentObjectId).then(res => {
+        this.setState({ contact: res.data })
+        this.setState({ notes: res.data.notes })
+        this.setState({ currentNotes: res.data.notes })
+      })
+
+    })
+  }
+
+
+  editNote = (id, body, title, date) => {
+    this.setState({
+      show: !this.state.show,
+      noteId: id,
+      noteTitle: title,
+      noteBody: body,
+      createdOn: date
+    });
   }
 
   render() {
@@ -346,21 +424,25 @@ class ContactList extends React.Component {
               <div className="container">
                 <div className="row">
                   <div className="col">
-                    <form >
-                      <div class="form-group">
-                        <label for="exampleFormControlInput1">Note title</label>
-                        <MDBInput type="textarea" label="Example label" outline />
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleFormControlSelect1">ImageUpload</label>
-                        <ImageUpload />
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleFormControlSelect2">Note Body</label>
-                        <MDBInput type="textarea" label="Example label" outline />
-                      </div>
-                      <button onClick={() => this.handleClickNote()} name="addContact" type="button" className="btn btn-primary">save</button>
-                    </form>
+                  <form>
+                  <div class="form-group">
+                    <label for="exampleFormControlInput1"></label>
+                    <MDBInput type="date" name="createdOn" value={this.state.createdOn} onChange={this.handleInputChange} label="Date" outline />
+
+                    <label for="exampleFormControlInput1"></label>
+                    <MDBInput type="textarea" value={this.state.noteTitle} name="noteTitle" onChange={this.handleInputChange} label="Note Title" outline />
+
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">ImageUpload</label>
+                    <ImageUpload setConvertedTextState={this.setConvertedTextState} />
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect2"></label>
+                    <MDBInput type="textarea" value={this.state.noteBody} name="noteBody" onChange={this.handleInputChange} label="Note Body" outline />
+                  </div>
+                  <button onClick={() => this.saveNote()} name="addNote" type="button" className="btn btn-primary">Save</button>
+                </form>
                   </div>
                 </div>
               </div>

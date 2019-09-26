@@ -2,12 +2,11 @@ import React from "react";
 import {
   MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem,  MDBNavbarToggler, MDBCollapse, MDBFormInline,
 } from "mdbreact";
-import "./NavStyle.css"
-
-
+import "./NavStyle.css";
+import Auth from "../../utils/Auth";
+import UserContext from "../../context/UserContext";
 
 class Nav extends React.Component {
-
   state = {
     username: "",
     isOpen: false
@@ -53,4 +52,3 @@ class Nav extends React.Component {
   }
 }
 export default Nav;
-

@@ -2,10 +2,27 @@ import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBModalFooter } from 'mdbreact';
 import "./LoginStyle.css"
 import ReactCardFlip from 'react-card-flip';
+import React, { Component } from "react";
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+  MDBBtn,
+  MDBIcon,
+  MDBModalFooter
+} from "mdbreact";
+import { withRouter } from "react-router-dom";
+import UserContext from "../context/UserContext";
+import Auth from "../utils/Auth";
+import "./LoginStyle.css";
+import ReactCardFlip from "react-card-flip";
 
+class Login extends Component {
+  static contextType = UserContext;
 
-
-class Login extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -18,10 +35,11 @@ class Login extends React.Component {
 
   handleInputChange = event => {
     const { value, name } = event.target;
+
     this.setState({
       [name]: value
     });
-  }
+  };
 
   handleClick(e) {
     e.preventDefault();
@@ -30,15 +48,22 @@ class Login extends React.Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (!this.state.username || !this.state.password) {
-      alert("Enter username and password");
+    const { username, password } = this.state;
+
+    if (username && password) {
+      Auth.logIn(username, password, response => {
+        this.context.setUser(response);
+        console.log(this.context.response);
+        this.props.history.push("/homePage");
+      });
     } else {
-      localStorage.setItem("username", this.state.username);
+      alert("Enter username and password");
     }
-  }
+  };
 
   render() {
     return (
+
       
     
       <div style={{textAlign: "center"}} >
@@ -135,58 +160,59 @@ class Login extends React.Component {
                                   success="right"
                                   style={{display: "block"}}
                                 />
-                                <MDBInput
-                               
-                                  label="Your email"
-                                  icon="envelope"
-                                  group
-                                  type="email"
-                                  validate
-                                  error="wrong"
-                                  success="right"
-                                />
-                                <MDBInput
-                               
-                                  label="Confirm your email"
-                                  icon="exclamation-triangle"
-                                  group
-                                  type="text"
-                                  validate
-                                  error="wrong"
-                                  success="right"
-                                />
-                                <MDBInput
-                               
-                                  label="Your password"
-                                  icon="lock"
-                                  group
-                                  type="password"
-                                  validate
-                                />
-                              </div>
-                              <div className="text-center py-4 mt-3">
-                                <MDBBtn onClick={this.handleClick} color="primary" size="md">
-                                  Register
-                                </MDBBtn>
-                              </div>
-                            </form>
-                          </MDBCardBody>
-                        </MDBCard>
-                      </MDBCol>
-                    </MDBRow>
-                  </MDBContainer>
-                  <div className="text-md-right">
+
+            
+                                  <MDBInput
+                                    label="Your email"
+                                    icon="envelope"
+                                    group
+                                    type="email"
+                                    validate
+                                    error="wrong"
+                                    success="right"
+                                  />
+                                  <MDBInput
+                                    label="Confirm your email"
+                                    icon="exclamation-triangle"
+                                    group
+                                    type="text"
+                                    validate
+                                    error="wrong"
+                                    success="right"
+                                  />
+                                  <MDBInput
+                                    label="Your password"
+                                    icon="lock"
+                                    group
+                                    type="password"
+                                    validate
+                                  />
+                                </div>
+                                <div className="text-center py-4 mt-3">
+                                  <MDBBtn
+                                    onClick={this.handleClick}
+                                    color="primary"
+                                    size="md"
+                                  >
+                                    Register
+                                  </MDBBtn>
+                                </div>
+                              </form>
+                            </MDBCardBody>
+                          </MDBCard>
+                        </MDBCol>
+                      </MDBRow>
+                    </MDBContainer>
+                    <div className="text-md-right"></div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ReactCardFlip>
+          </ReactCardFlip>
+        </div>
       </div>
-      </div>
-    )
-
+    );
   }
 }
 
-export default Login
+export default withRouter(Login);
