@@ -6,7 +6,6 @@ import ContactList from "./components/ContactList";
 import LoginPage from "./components/Login";
 import Nav from "./components/Nav/Nav";
 import NoteForm from "./components/NoteForm";
-import NoteList from "./components/NoteList";
 import UserContext from "./context/UserContext";
 import authenticatedAxios from "./utils/AuthenticatedAxios";
 
@@ -17,7 +16,6 @@ const HomePage = props => (
     <div className="container">
       <div className="row">
         <div className="col">
-          <NoteList />
         </div>
       </div>
 
@@ -32,11 +30,6 @@ const HomePage = props => (
     </div>
   </div>
 );
-
-// const LoginPage = props =>
-//   <div>
-//     <Login />
-//   </div>
 
 class App extends Component {
   state = {

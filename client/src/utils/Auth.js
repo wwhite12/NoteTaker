@@ -15,6 +15,7 @@ function Auth () {
     }
 
     function logOut (cb) {
+        console.log("logged out");
         localStorage.removeItem("token");
         cb();
     }

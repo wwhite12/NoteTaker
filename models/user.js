@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-// Save a reference to the Schema constructor
-// const Schema = mongoose.Schema;
-
-// Using the Schema constructor, create a new NoteSchema object
 
 const UserSchema = new mongoose.Schema({
   username: {

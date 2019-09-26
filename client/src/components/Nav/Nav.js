@@ -13,20 +13,39 @@ import {
   MDBDropdownMenu,
   MDBDropdownItem
 } from "mdbreact";
+
 import "./NavStyle.css";
+import { withRouter } from "react-router-dom";
 import Auth from "../../utils/Auth";
+
 import UserContext from "../../context/UserContext";
 
+
 class Nav extends React.Component {
-  state = {
+  static contextType = UserContext;
+  constructor () {
+    super()
+  this.state = {
     username: "",
     isOpen: false
   };
+  }
 
   toggleCollapse = () => {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
+  onClick = event => {
+    event.preventDefault();
+   console.log("logging out");
+   const state = this.props.location.state;
+      Auth.logOut(response => {
+        
+        
+        this.props.history.push("/", {response:response});
+      })
+    
+  };
 
   
   render () {
@@ -51,7 +70,7 @@ class Nav extends React.Component {
         </MDBNavItem>
         <MDBNavItem>
           <MDBFormInline waves>
-          <button type="button" className="btn btn-primary" onClick={this.handleFormSubmit}>Sign out</button>
+          <button onClick={this.onClick} type="button" className="btn btn-primary" >Sign out</button>
           </MDBFormInline>
         </MDBNavItem>
       </MDBNavbarNav>
@@ -62,4 +81,5 @@ class Nav extends React.Component {
   )
   }
 }
-export default Nav;
+export default withRouter(Nav);
+
