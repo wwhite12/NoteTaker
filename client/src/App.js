@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ContactForm from "./components/ContactForm";
@@ -34,7 +34,7 @@ const HomePage = props => (
 //     <Login />
 //   </div>
 
-class App extends Component {
+class App extends React.Component {
   state = {
     user: null
   };

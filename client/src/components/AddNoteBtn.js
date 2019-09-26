@@ -50,7 +50,7 @@ class ImageUpload extends React.Component {
       let {uploadedImage} = this.state;
       let $imagePreview = null;
       if (uploadedImage) {
-        $imagePreview = (<img src={uploadedImage} />);
+        $imagePreview = (<img src={uploadedImage}   alt="imageInAddNotebBtn.js" />);
       } else {
         $imagePreview = (<div className="previewText"></div>);
       }
