@@ -3,7 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } fro
 import { MDBJumbotron } from "mdbreact";
 import NoteCard from "./NoteCard";
 import NewNoteButton from "./NewNoteButton";
-import notes from "./notes.json";
+
 
 
 class NoteList extends React.Component {
@@ -11,7 +11,7 @@ class NoteList extends React.Component {
         super(props);
       
     this.state = {
-        notes
+        notes: []
 
     };
 }

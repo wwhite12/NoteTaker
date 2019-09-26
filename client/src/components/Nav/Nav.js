@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import {
-  MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBFormInline,
-  MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem
+  MDBNavbar,
+  MDBNavbarBrand,
+  MDBNavbarNav,
+  MDBNavItem,
+  MDBNavLink,
+  MDBNavbarToggler,
+  MDBCollapse,
+  MDBFormInline,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdownItem
 } from "mdbreact";
-import "./NavStyle.css"
-
-
+import "./NavStyle.css";
+import Auth from "../../utils/Auth";
+import UserContext from "../../context/UserContext";
 
 class Nav extends React.Component {
-
   state = {
     username: "",
     isOpen: false
@@ -42,7 +51,7 @@ class Nav extends React.Component {
             </MDBNavItem>
             <MDBNavItem>
               <MDBFormInline waves>
-                <button type="button" className="btn btn-primary">Sign out</button>
+                <button type="button" className="btn btn-primary" onClick={this.handleFormSubmit}>Sign out</button>
               </MDBFormInline>
             </MDBNavItem>
           </MDBNavbarNav>
@@ -51,8 +60,6 @@ class Nav extends React.Component {
 
 
     )
-
   }
 }
 export default Nav;
-

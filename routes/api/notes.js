@@ -14,6 +14,3 @@ router
     .delete(notesController.remove);
 
 module.exports = router;
-
-
-
