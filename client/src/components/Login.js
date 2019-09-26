@@ -1,24 +1,13 @@
-import React from "react";
+//import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBModalFooter } from 'mdbreact';
 import "./LoginStyle.css"
 import ReactCardFlip from 'react-card-flip';
 import React, { Component } from "react";
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
-  MDBBtn,
-  MDBIcon,
-  MDBModalFooter
-} from "mdbreact";
 import { withRouter } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Auth from "../utils/Auth";
-import "./LoginStyle.css";
-import ReactCardFlip from "react-card-flip";
+
+
 
 class Login extends Component {
   static contextType = UserContext;
