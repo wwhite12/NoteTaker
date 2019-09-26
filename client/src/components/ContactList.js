@@ -33,7 +33,8 @@ class ContactList extends React.Component {
       country: "USA",
       email: "",
       phone: "",
-      interest: ""
+      interest: "",
+      convertedText: "TEST"
     };
 
 
@@ -342,7 +343,7 @@ class ContactList extends React.Component {
   </div>
   <div class="form-group">
     <label for="exampleFormControlSelect2">Note Body</label>
-    <MDBInput type="textarea" label="Example label" outline />
+    <MDBInput type="textarea" label="Example label" outline name="convertedText"value={this.state.convertedText} onChange={this.handleInputChange}/>
   </div>
   <button onClick={ () => this.handleClickNote() } name="addContact" type="button" className="btn btn-primary">save</button>
 </form>

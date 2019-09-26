@@ -12,6 +12,7 @@ module.exports = function (app) {
             const fullText = await convertText(fileName);
 
             res.json({ message: fullText });
+           
         } catch(err) {
             res.json(err);
         }
