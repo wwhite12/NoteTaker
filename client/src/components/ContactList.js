@@ -15,6 +15,7 @@ class ContactList extends React.Component {
 
   constructor() {
     super();
+    
     this.state = {
       contacts: [],
       notes: [],
@@ -34,7 +35,7 @@ class ContactList extends React.Component {
       email: "",
       phone: "",
       interest: "",
-      convertedText: "TEST"
+      convertedText: ""
     };
 
 
@@ -310,6 +311,10 @@ class ContactList extends React.Component {
 
   }
 
+  setConvertedTextState = text => {
+    this.setState({convertedText : text})
+  }
+
 
   render() {
 
@@ -339,13 +344,12 @@ class ContactList extends React.Component {
   </div>
   <div class="form-group">
     <label for="exampleFormControlSelect1">ImageUpload</label>
-    <ImageUpload /> 
+    <ImageUpload setConvertedTextState={this.setConvertedTextState}/> 
   </div>
   <div class="form-group">
     <label for="exampleFormControlSelect2">Note Body</label>
     <MDBInput type="textarea" label="Example label" outline name="convertedText"value={this.state.convertedText} onChange={this.handleInputChange}/>
   </div>
-  <button onClick={ () => this.handleClickNote() } name="addContact" type="button" className="btn btn-primary">save</button>
 </form>
             
           </div>

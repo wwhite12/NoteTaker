@@ -26,7 +26,7 @@ class ImageUpload extends React.Component {
             })
         })
             .then(res => res.json())
-            .then(res => this.setState({ convertedText: res.message }))
+            .then(res => this.props.setConvertedTextState(res.message))
             .catch(err => console.log(err))
     }
   
@@ -64,6 +64,7 @@ class ImageUpload extends React.Component {
             <button className="submitButton" 
               type="submit" 
               onClick={()=>this.addNoteHandler()}>Convert Notes</button>
+              
           </form>
           <div className="imgPreview">
             {$imagePreview}
