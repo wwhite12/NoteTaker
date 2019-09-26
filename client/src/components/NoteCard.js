@@ -13,10 +13,10 @@ function NoteCard(props) {
                 <div className="col-md-8">
                     <div className="card-body">
 
+                        <p className="card-text"><small className="text-muted">{props.createdOn}</small></p>
                         <h5 className="card-title">{props.noteTitle}</h5>
                         <p className="card-text">{props.noteBody}</p>
-                        <p className="card-text"><small className="text-muted">{props.createdOn}</small></p>
-                        <button type="button" className="btn btn-primary btn-sm" value={props.id} onClick={() => props.editNote(props.id, props.noteBody, props.noteTitle)}>Edit</button>
+                        <button type="button" className="btn btn-primary btn-sm" value={props.id} onClick={() => props.editNote(props.id, props.noteBody, props.noteTitle, props.createdOn)}>Edit</button>
                         <button type="button" className="btn btn-primary btn-sm" value={props.id} onClick={() => props.deleteNote(props.id)}>Delete</button>
                     </div>
                 </div>

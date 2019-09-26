@@ -36,7 +36,8 @@ class ContactList extends React.Component {
       interest: "",
       noteTitle: "",
       noteBody: "",
-      noteId: ""
+      noteId: "",
+      createdOn: Date.now
     };
 
 
@@ -315,7 +316,8 @@ class ContactList extends React.Component {
   saveNote = () => {
     const noteData = {
       noteTitle: this.state.noteTitle,
-      noteBody: this.state.noteBody
+      noteBody: this.state.noteBody,
+      createdOn: this.state.createdOn
     }
 
     if (this.state.noteId === "") {
@@ -331,7 +333,7 @@ class ContactList extends React.Component {
             this.setState({ contact: res.data })
             this.setState({ notes: res.data.notes })
             this.setState({ currentNotes: res.data.notes })
-            this.setState({ noteTitle: "", noteBody: "" })
+            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
 
           })
         })
@@ -346,7 +348,7 @@ class ContactList extends React.Component {
           this.setState({ contact: res.data })
           this.setState({ notes: res.data.notes })
           this.setState({ currentNotes: res.data.notes })
-          this.setState({ noteTitle: "", noteBody: "" })
+          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
 
 
         })
@@ -366,12 +368,13 @@ class ContactList extends React.Component {
   }
 
 
-  editNote = (id, body, title) => {
+  editNote = (id, body, title, date) => {
     this.setState({
       show: !this.state.show,
       noteId: id,
       noteTitle: title,
-      noteBody: body
+      noteBody: body,
+      createdOn: date
     });
   }
 
@@ -398,6 +401,9 @@ class ContactList extends React.Component {
 
                 <form>
                   <div class="form-group">
+                    <label for="exampleFormControlInput1"></label>
+                    <MDBInput type="date" name="createdOn" value={this.state.createdOn} onChange={this.handleInputChange} label="Date" outline />
+
                     <label for="exampleFormControlInput1"></label>
                     <MDBInput type="textarea" value={this.state.noteTitle} name="noteTitle" onChange={this.handleInputChange} label="Note Title" outline />
 

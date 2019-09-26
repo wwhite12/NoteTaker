@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
 const NoteSchema = new Schema({
     noteId: String,
     noteTitle: String,
-    noteBody: String
+    noteBody: String,
+    createdOn: Date
 
 
 });
