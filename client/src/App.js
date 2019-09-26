@@ -21,10 +21,8 @@ const HomePage = props => (
 
       <div className="row">
         <div className="col">
-          <ContactForm />
         </div>
         <div className="col">
-          <NoteForm />
         </div>
       </div>
     </div>
