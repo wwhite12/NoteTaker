@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
+
 // This creates our model from the above schema, using mongoose's model method
 const Schema = mongoose.Schema;
+
+const bcrypt = require("bcryptjs");
+
+// This creates our model from the above schema, using mongoose's model method
+
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -8,13 +14,9 @@ const UserSchema = new mongoose.Schema({
       unique: true
     }
   },
-  password: String,
-  contacts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Contact"
-    }
-  ]
+  password: String
+
+
 });
 
 UserSchema.methods.comparePassword = function (inputPass) {
