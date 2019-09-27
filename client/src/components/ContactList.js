@@ -342,7 +342,7 @@ class ContactList extends React.Component {
           show: !this.state.show
         });
 
-        API.updateContactFromNote(this.state.currentObjectId, res.data._id).then(res => {
+        API.updateContactAddNote(this.state.currentObjectId, res.data._id).then(res => {
           API.getContact(res.data._id).then(res => {
             console.log(res.data)
             this.setState({ contact: res.data })
@@ -377,6 +377,11 @@ class ContactList extends React.Component {
 
   deleteNote = (id) => {
     API.deleteNote(id).then(res => {
+      console.log(res.data)
+      API.updateContactDeleteNote(this.state.currentObjectId, res.data._id).then(res => {
+      })
+
+
       API.getContact(this.state.currentObjectId).then(res => {
         this.setState({ contact: res.data })
         this.setState({ notes: res.data.notes })
