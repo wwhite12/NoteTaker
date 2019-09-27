@@ -43,7 +43,7 @@ class ContactList extends React.Component {
       noteBody: "",
       noteId: "",
       createdOn: Date.now,
-      username: "",
+      username: localStorage.getItem("username"),
       userId: ""
     };
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
@@ -51,8 +51,13 @@ class ContactList extends React.Component {
   }
 
 
+
   componentWillMount() {
     mql.addListener(this.mediaQueryChanged);
+    API.getUserByUsername(this.state.username).then(res => {
+      const user = res.data[0]["_id"]
+      this.setState({ userId: user })
+    });
   }
 
   componentWillUnmount() {
@@ -81,39 +86,34 @@ class ContactList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadContacts();
-    this.setState({ username: localStorage.getItem("username") })
-    API.getUserByUsername(this.state.username).then(res => {
-      const user = res.data[0]["_id"]
-      this.setState({ userId: user })
-    })
-
+    this.loadContacts(this.state.userId);
 
 
   }
 
-  loadContacts = () => {
-    API.getContacts()
+  loadContacts = (id) => {
+    API.getUser(id)
       .then(res => {
-        console.log(res.data)
-        this.setState({ contacts: res.data })
-        this.setState({ contact: res.data[0] })
+        console.log(res)
+        this.setState({ contacts: res.data[0]["contacts"] })
+        this.setState({ contact: res.data[0]["contacts"][0] })
         this.setState({
-          firstName: res.data[0]["firstName"],
-          lastName: res.data[0]["lastName"],
-          company: res.data[0]["company"],
-          streetAddress: res.data[0]["streetAddress"],
-          city: res.data[0]["city"],
-          state: res.data[0]["state"],
-          zip: res.data[0]["zip"],
-          country: res.data[0]["country"],
-          email: res.data[0]["email"],
-          phone: res.data[0]["phone"],
-          interest: res.data[0]["interest"],
-          notes: res.data[0]["notes"],
-          currentNotes: res.data[0]["notes"],
-          currentObjectId: res.data[0]["_id"]
+          firstName: res.data[0]["contacts"][0]["firstName"],
+          lastName: res.data[0]["contacts"][0]["lastName"],
+          company: res.data[0]["contacts"][0]["company"],
+          streetAddress: res.data[0]["contacts"][0]["streetAddress"],
+          city: res.data[0]["contacts"][0]["city"],
+          state: res.data[0]["contacts"][0]["state"],
+          zip: res.data[0]["contacts"][0]["zip"],
+          country: res.data[0]["contacts"][0]["country"],
+          email: res.data[0]["contacts"][0]["email"],
+          phone: res.data[0]["contacts"][0]["phone"],
+          interest: res.data[0]["contacts"][0]["interest"],
+          notes: res.data[0]["contacts"][0]["notes"],
+          currentNotes: res.data[0]["contacts"][0]["notes"],
+          currentObjectId: res.data[0]["contacts"][0]["_id"]
         });
+
       }
       )
 
@@ -210,17 +210,17 @@ class ContactList extends React.Component {
           notes: res.data["notes"],
           currentNotes: res.data["notes"]
         })
-
-        API.getContacts()
-          .then(res => {
-            console.log(res.data)
-            this.setState({ contacts: res.data })
-          })
-          .catch(err => console.log(err));
-
         API.updateUserFromContacts(this.state.userId, this.state.currentObjectId).then(res => {
           console.log(res)
         })
+
+        API.getUser(this.state.userId)
+          .then(res => {
+            console.log(res.data.contacts)
+            this.setState({ contacts: res.data.contacts })
+          })
+          .catch(err => console.log(err));
+
 
 
 
@@ -261,14 +261,14 @@ class ContactList extends React.Component {
           currentNotes: res.data["notes"]
         })
 
-        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
 
-        API.getContacts()
+        API.getUser(this.state.userId)
           .then(res => {
-            console.log(res.data)
-            this.setState({ contacts: res.data })
-            this.setState({ contact: contactData })
+            console.log(res.data.contacts)
+            this.setState({ contacts: res.data.contacts })
+            this.setState({ contact: res.data.contacts[0] })
+            this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
           })
           .catch(err => console.log(err));
@@ -297,29 +297,26 @@ class ContactList extends React.Component {
       })
       this.setState({ contact: [] })
     });
-    API.getContacts()
+    API.getUser(this.state.userId)
       .then(res => {
-        console.log(res.data)
-        let previous = res.data.length - 1;
-        console.log(previous)
-        this.setState({ contact: res.data[previous] })
-        this.setState({ contacts: res.data })
+        this.setState({ contact: res.data.contacts[0] })
+        this.setState({ contacts: res.data.contacts })
         this.setState({
-          firstName: res.data[previous]["firstName"],
-          lastName: res.data[previous]["lastName"],
-          company: res.data[previous]["company"],
-          streetAddress: res.data[previous]["streetAddress"],
-          city: res.data[previous]["city"],
-          state: res.data[previous]["state"],
-          zip: res.data[previous]["zip"],
-          notes: res.data[previous]["notes"],
-          country: res.data[previous]["country"],
-          email: res.data[previous]["email"],
-          phone: res.data[previous]["phone"],
-          interest: res.data[previous]["interest"],
-          currentNotes: res.data[previous]["notes"]
+          firstName: res.data.contacts[0]["firstName"],
+          lastName: res.data.contacts[0]["lastName"],
+          company: res.data.contacts[0]["company"],
+          streetAddress: res.data.contacts[0]["streetAddress"],
+          city: res.data.contacts[0]["city"],
+          state: res.data.contacts[0]["state"],
+          zip: res.data.contacts[0]["zip"],
+          notes: res.data.contacts[0]["notes"],
+          country: res.data.contacts[0]["country"],
+          email: res.data.contacts[0]["email"],
+          phone: res.data.contacts[0]["phone"],
+          interest: res.data.contacts[0]["interest"],
+          currentNotes: res.data.contacts[0]["notes"]
         })
-        this.setState({ currentObjectId: res.data[previous]["_id"] })
+        this.setState({ currentObjectId: res.data.contacts[0]["_id"] })
       }
       )
       .catch(err => console.log(err));
