@@ -23,7 +23,7 @@ class Login extends Component {
   }
 
   handleInputChange = event => {
-    const { value, name } = event.target;
+    const { name, value } = event.target;
 
     this.setState({
       [name]: value
@@ -60,7 +60,7 @@ class Login extends Component {
     if (username && password) {
       Auth.logIn(username, password, response => {
         this.context.setUser(response);
-        console.log(this.context.response);
+        console.log(this.context);
         this.props.history.push("/homePage");
       });
     } else {

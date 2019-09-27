@@ -1,5 +1,5 @@
 import axios from "axios";
-const User = require ("../../../models/user");
+const User = typeof import("mongoose");
 
 function Auth() {
   function logIn(username, password, cb) {
@@ -18,6 +18,7 @@ function Auth() {
         res.json({ message: "user created" });
         cb(res);
       });
+      console.log("Created User!");
     });
   }
 

@@ -29,16 +29,7 @@ const HomePage = props => (
   </div>
 );
 
-<<<<<<< HEAD
-class App extends Component {
-=======
-// const LoginPage = props =>
-//   <div>
-//     <Login />
-//   </div>
-
 class App extends React.Component {
->>>>>>> 0460412aa111245c9d9fc145de0d7e0bb7f42e1f
   state = {
     user: null
   };
