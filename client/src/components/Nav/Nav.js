@@ -11,7 +11,7 @@ import UserContext from "../../context/UserContext";
 
 
 class Nav extends React.Component {
-  static contextType = UserContext;
+  
   constructor () {
     super()
   this.state = {
@@ -54,7 +54,11 @@ class Nav extends React.Component {
       <MDBNavbarNav right>
       <MDBNavItem>
           <MDBFormInline >
-            <p id="loggedInAs">Logged in as: {this.state.username}</p>
+            <UserContext.Consumer>
+            {context => <>
+            <p id="loggedInAs">Logged in as: {context.user && context.user.username}</p>
+            </>}
+            </UserContext.Consumer>
           </MDBFormInline>
         </MDBNavItem>
         <MDBNavItem>

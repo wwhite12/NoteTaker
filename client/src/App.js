@@ -53,7 +53,6 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App">
-          <Nav />
 
           <UserContext.Provider
             value={{
@@ -61,6 +60,7 @@ class App extends React.Component {
               setUser: setUser
             }}
           >
+            <Nav />
             <Switch>
               <ProtectedRoute exact path="/homePage" component={HomePage} />
               <Route exact path="/" component={LoginPage} />
