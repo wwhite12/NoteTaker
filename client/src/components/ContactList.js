@@ -404,7 +404,9 @@ class ContactList extends React.Component {
         sidebar={<b >
 
           {/* content inside bar */}
-          <button style={{ margin: "10px 5px 1px 30px " }, { fontSize: "20px" }} onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
+          <div id="div-for-add-button" style={{ textAlign: "center" }}>
+            <button id="add-button" onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
+          </div>
           <div className="list-group">
             {this.state.contacts.map((contact, index) => (
               <ContactCard
@@ -429,9 +431,9 @@ class ContactList extends React.Component {
           <Nav />
           <div className="App" >
 
-            <div className={this.state.IsContactListOpen ? "hidden" : "open"}>
+            <div className="view-contact-button">
               <button
-                onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">Open Contacts</button>
+                onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">View Contacts</button>
             </div>
             <p className="App-intro"></p>
             <ToggleDisplay show={this.state.show}>
@@ -539,7 +541,7 @@ class ContactList extends React.Component {
                                     </li>
                                     <li>
                                       <MDBIcon icon="envelope" size="2x" className="blue-text mt-4" />
-                                      <p>{this.state.contact.email}</p>
+                                      <p style={{ overflowWrap: "break-word" }}>{this.state.contact.email}</p>
                                     </li>
                                   </ul>
                                 </MDBCol>
