@@ -11,11 +11,11 @@ import Nav from "./Nav/Nav";
 import Sidebar from "react-sidebar";
 import "./ContactListStyle.css"
 
-const mql = window.matchMedia(`(min-width: 800px)`);
 class ContactList extends React.Component {
 
   constructor() {
     super();
+    this.mql = window.matchMedia(`(min-width: 800px)`);
 
     this.state = {
       contacts: [],
@@ -36,7 +36,7 @@ class ContactList extends React.Component {
       email: "",
       phone: "",
       interest: "",
-      sidebarDocked: mql.matches,
+      sidebarDocked: this.mql.matches,
       sidebarOpen: false,
       IsContactListOpen: true,
       noteTitle: "",
@@ -54,7 +54,7 @@ class ContactList extends React.Component {
 
 
   componentWillMount() {
-    mql.addListener(this.mediaQueryChanged);
+    this.mql.addListener(this.mediaQueryChanged);
     API.getUserByUsername(this.state.username).then(res => {
       const user = res.data[0]["_id"]
       if (res.data[0]["contacts"].length === 0) {
@@ -76,11 +76,11 @@ class ContactList extends React.Component {
 
 
   componentWillUnmount() {
-    this.state.mql.removeListener(this.mediaQueryChanged);
+    this.mql.removeListener(this.mediaQueryChanged);
   }
 
   mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
+    this.setState({ sidebarDocked: this.mql.matches, sidebarOpen: false });
     this.setState(oldState => ({ IsContactListOpen: !oldState.IsContactListOpen }));
   }
 

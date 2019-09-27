@@ -4,19 +4,29 @@ import {
 } from "mdbreact";
 import "./NavStyle.css";
 import Auth from "../../utils/Auth";
+import { withRouter } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 
 class Nav extends React.Component {
-  state = {
-    username: "",
-    isOpen: false
-  };
+  constructor() {
+    super()
 
+    this.state = {
+      username: "",
+      isOpen: false
+    };
+  }
   toggleCollapse = () => {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-
+  onClick = event => {
+    event.preventDefault();
+    Auth.logOut(response => {
+      this.props.history.push("/", { response: response });
+    })
+    localStorage.setItem("username", "")
+  }
 
 
   render() {
@@ -41,7 +51,7 @@ class Nav extends React.Component {
                 </MDBFormInline>
               </MDBNavItem>
               <MDBNavItem>
-                <MDBFormInline waves>
+                <MDBFormInline waves onClick={this.onClick}>
                   <button type="button" className="btn btn-primary">Sign out</button>
                 </MDBFormInline>
               </MDBNavItem>
@@ -54,4 +64,4 @@ class Nav extends React.Component {
     )
   }
 }
-export default Nav;
+export default withRouter(Nav);

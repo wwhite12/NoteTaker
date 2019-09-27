@@ -14,6 +14,15 @@ function Auth() {
             });
     }
 
+    function signUp(username, password, cb) {
+        axios.post("/api/signup", { username, password }).then(res => {
+
+            cb(res);
+
+        });
+    }
+
+
     function logOut(cb) {
         localStorage.removeItem("token");
         cb();
@@ -37,7 +46,8 @@ function Auth() {
         isLoggedIn,
         logIn,
         logOut,
-        getToken
+        getToken,
+        signUp
     }
 }
 
