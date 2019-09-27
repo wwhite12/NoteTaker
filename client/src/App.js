@@ -29,6 +29,10 @@ const HomePage = props => (
   </div>
 );
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15c92de2275a4933917cd1f391344318b31a1751
 class App extends React.Component {
   state = {
     user: null

@@ -1,5 +1,8 @@
-#loggedInAs{
-    margin-top: 10%;
-    margin-left: -80%;
+#loggedInAs {
+  margin-top: 10%;
+  margin-left: -80%;
+}
 
+.hidden {
+  visibility: hidden;
 }

@@ -13,4 +13,11 @@ router
     .put(contactsController.update)
     .delete(contactsController.remove);
 
+router
+    .route("/:id/notes/:noteId")
+    .delete(contactsController.updateNoteArray)
+
+
+
+
 module.exports = router;
