@@ -43,12 +43,12 @@ class ContactList extends React.Component {
       noteBody: "",
       noteId: "",
       createdOn: Date.now,
-      username: ""
+      username: "",
+      userId: ""
     };
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
-
 
 
   componentWillMount() {
@@ -83,6 +83,13 @@ class ContactList extends React.Component {
   componentDidMount() {
     this.loadContacts();
     this.setState({ username: localStorage.getItem("username") })
+    API.getUserByUsername(this.state.username).then(res => {
+      const user = res.data[0]["_id"]
+      this.setState({ userId: user })
+    })
+
+
+
   }
 
   loadContacts = () => {
@@ -109,8 +116,10 @@ class ContactList extends React.Component {
         });
       }
       )
+
       .catch(err => console.log(err));
   }
+
 
   addContact = (e) => {
     e.preventDefault();
@@ -208,6 +217,12 @@ class ContactList extends React.Component {
             this.setState({ contacts: res.data })
           })
           .catch(err => console.log(err));
+
+        API.updateUserFromContacts(this.state.userId, this.state.currentObjectId).then(res => {
+          console.log(res)
+        })
+
+
 
       });
 
