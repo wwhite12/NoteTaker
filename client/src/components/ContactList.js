@@ -57,16 +57,21 @@ class ContactList extends React.Component {
     mql.addListener(this.mediaQueryChanged);
     API.getUserByUsername(this.state.username).then(res => {
       const user = res.data[0]["_id"]
-      console.log(res.data[0]["contacts"][0]["notes"])
-      this.setState({ userId: user })
-      API.getContact(res.data[0]["contacts"][0]["_id"]).then(res => {
-        console.log(res.data)
-        this.setState({
-          currentNotes: res.data["notes"]
-        })
-      });
+      if (res.data[0]["contacts"].length === 0) {
+        console.log("OK")
+      } else {
+        console.log(res.data[0]["contacts"][0]["notes"])
+        this.setState({ userId: user })
+        API.getContact(res.data[0]["contacts"][0]["_id"]).then(res => {
+          console.log(res.data)
+          this.setState({
+            currentNotes: res.data["notes"]
+          })
+        });
+      }
     })
   }
+
 
   componentWillUnmount() {
     this.state.mql.removeListener(this.mediaQueryChanged);
@@ -112,25 +117,42 @@ class ContactList extends React.Component {
 
       .then(res => {
         console.log(res)
-        this.setState({ contacts: res.data[0]["contacts"] })
-        this.setState({ contact: res.data[0]["contacts"][0] })
-        this.setState({
-          firstName: res.data[0]["contacts"][0]["firstName"],
-          lastName: res.data[0]["contacts"][0]["lastName"],
-          company: res.data[0]["contacts"][0]["company"],
-          streetAddress: res.data[0]["contacts"][0]["streetAddress"],
-          city: res.data[0]["contacts"][0]["city"],
-          state: res.data[0]["contacts"][0]["state"],
-          zip: res.data[0]["contacts"][0]["zip"],
-          country: res.data[0]["contacts"][0]["country"],
-          email: res.data[0]["contacts"][0]["email"],
-          phone: res.data[0]["contacts"][0]["phone"],
-          interest: res.data[0]["contacts"][0]["interest"],
-          notes: res.data[0]["contacts"][0]["notes"],
-          currentNotes: res.data[0]["contacts"][0]["notes"],
-          currentObjectId: res.data[0]["contacts"][0]["_id"]
-        });
-
+        if (res.data[0]["contacts"].length === 0) {
+          this.setState({
+            firstName: "Welcome",
+            lastName: this.state.username,
+            company: "",
+            streetAddress: "",
+            city: "",
+            state: "",
+            zip: "",
+            country: "",
+            notes: [],
+            email: "",
+            phone: "",
+            interest: "",
+            currentObjectId: ""
+          });
+        } else {
+          this.setState({ contacts: res.data[0]["contacts"] })
+          this.setState({ contact: res.data[0]["contacts"][0] })
+          this.setState({
+            firstName: res.data[0]["contacts"][0]["firstName"],
+            lastName: res.data[0]["contacts"][0]["lastName"],
+            company: res.data[0]["contacts"][0]["company"],
+            streetAddress: res.data[0]["contacts"][0]["streetAddress"],
+            city: res.data[0]["contacts"][0]["city"],
+            state: res.data[0]["contacts"][0]["state"],
+            zip: res.data[0]["contacts"][0]["zip"],
+            country: res.data[0]["contacts"][0]["country"],
+            email: res.data[0]["contacts"][0]["email"],
+            phone: res.data[0]["contacts"][0]["phone"],
+            interest: res.data[0]["contacts"][0]["interest"],
+            notes: res.data[0]["contacts"][0]["notes"],
+            currentNotes: res.data[0]["contacts"][0]["notes"],
+            currentObjectId: res.data[0]["contacts"][0]["_id"]
+          });
+        }
       }
       )
 
