@@ -9,8 +9,9 @@ const NoteSchema = new Schema({
     noteId: String,
     noteTitle: String,
     noteBody: String,
-    createdOn: Date,
+    createdOn: String,
     image: String
+
 });
 
 // This creates our model from the above schema, using mongoose's model method

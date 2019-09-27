@@ -43,8 +43,9 @@ class ContactList extends React.Component {
       noteBody: "",
       noteId: "",
       createdOn: Date.now,
-      username: "",
-      uploadedImage: ""
+      uploadedImage: "",
+      username: localStorage.getItem("username"),
+      userId: ""
     };
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -54,6 +55,17 @@ class ContactList extends React.Component {
 
   componentWillMount() {
     mql.addListener(this.mediaQueryChanged);
+    API.getUserByUsername(this.state.username).then(res => {
+      const user = res.data[0]["_id"]
+      console.log(res.data[0]["contacts"][0]["notes"])
+      this.setState({ userId: user })
+      API.getContact(res.data[0]["contacts"][0]["_id"]).then(res => {
+        console.log(res.data)
+        this.setState({
+          currentNotes: res.data["notes"]
+        })
+      });
+    })
   }
 
   componentWillUnmount() {
@@ -82,9 +94,11 @@ class ContactList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadContacts();
-    this.setState({ username: localStorage.getItem("username") })
+    this.loadContacts(this.state.userId);
+
+
   }
+
 
   setImage = image => {
     this.setState({
@@ -92,32 +106,37 @@ class ContactList extends React.Component {
     });
   }
 
-  loadContacts = () => {
-    API.getContacts()
+
+  loadContacts = (id) => {
+    API.getUser(id)
+
       .then(res => {
-        console.log(res.data)
-        this.setState({ contacts: res.data })
-        this.setState({ contact: res.data[0] })
+        console.log(res)
+        this.setState({ contacts: res.data[0]["contacts"] })
+        this.setState({ contact: res.data[0]["contacts"][0] })
         this.setState({
-          firstName: res.data[0]["firstName"],
-          lastName: res.data[0]["lastName"],
-          company: res.data[0]["company"],
-          streetAddress: res.data[0]["streetAddress"],
-          city: res.data[0]["city"],
-          state: res.data[0]["state"],
-          zip: res.data[0]["zip"],
-          country: res.data[0]["country"],
-          email: res.data[0]["email"],
-          phone: res.data[0]["phone"],
-          interest: res.data[0]["interest"],
-          notes: res.data[0]["notes"],
-          currentNotes: res.data[0]["notes"],
-          currentObjectId: res.data[0]["_id"]
+          firstName: res.data[0]["contacts"][0]["firstName"],
+          lastName: res.data[0]["contacts"][0]["lastName"],
+          company: res.data[0]["contacts"][0]["company"],
+          streetAddress: res.data[0]["contacts"][0]["streetAddress"],
+          city: res.data[0]["contacts"][0]["city"],
+          state: res.data[0]["contacts"][0]["state"],
+          zip: res.data[0]["contacts"][0]["zip"],
+          country: res.data[0]["contacts"][0]["country"],
+          email: res.data[0]["contacts"][0]["email"],
+          phone: res.data[0]["contacts"][0]["phone"],
+          interest: res.data[0]["contacts"][0]["interest"],
+          notes: res.data[0]["contacts"][0]["notes"],
+          currentNotes: res.data[0]["contacts"][0]["notes"],
+          currentObjectId: res.data[0]["contacts"][0]["_id"]
         });
+
       }
       )
+
       .catch(err => console.log(err));
   }
+
 
   addContact = (e) => {
     e.preventDefault();
@@ -208,13 +227,19 @@ class ContactList extends React.Component {
           notes: res.data["notes"],
           currentNotes: res.data["notes"]
         })
+        API.updateUserFromContacts(this.state.userId, this.state.currentObjectId).then(res => {
+          console.log(res)
+        })
 
-        API.getContacts()
+        API.getUser(this.state.userId)
           .then(res => {
-            console.log(res.data)
-            this.setState({ contacts: res.data })
+            console.log(res.data.contacts)
+            this.setState({ contacts: res.data.contacts })
           })
           .catch(err => console.log(err));
+
+
+
 
       });
 
@@ -253,14 +278,14 @@ class ContactList extends React.Component {
           currentNotes: res.data["notes"]
         })
 
-        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
 
-        API.getContacts()
+        API.getUser(this.state.userId)
           .then(res => {
-            console.log(res.data)
-            this.setState({ contacts: res.data })
-            this.setState({ contact: contactData })
+            console.log(res.data.contacts)
+            this.setState({ contacts: res.data.contacts })
+            this.setState({ contact: res.data.contacts[0] })
+            this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
           })
           .catch(err => console.log(err));
@@ -289,29 +314,26 @@ class ContactList extends React.Component {
       })
       this.setState({ contact: [] })
     });
-    API.getContacts()
+    API.getUser(this.state.userId)
       .then(res => {
-        console.log(res.data)
-        let previous = res.data.length - 1;
-        console.log(previous)
-        this.setState({ contact: res.data[previous] })
-        this.setState({ contacts: res.data })
+        this.setState({ contact: res.data.contacts[0] })
+        this.setState({ contacts: res.data.contacts })
         this.setState({
-          firstName: res.data[previous]["firstName"],
-          lastName: res.data[previous]["lastName"],
-          company: res.data[previous]["company"],
-          streetAddress: res.data[previous]["streetAddress"],
-          city: res.data[previous]["city"],
-          state: res.data[previous]["state"],
-          zip: res.data[previous]["zip"],
-          notes: res.data[previous]["notes"],
-          country: res.data[previous]["country"],
-          email: res.data[previous]["email"],
-          phone: res.data[previous]["phone"],
-          interest: res.data[previous]["interest"],
-          currentNotes: res.data[previous]["notes"]
+          firstName: res.data.contacts[0]["firstName"],
+          lastName: res.data.contacts[0]["lastName"],
+          company: res.data.contacts[0]["company"],
+          streetAddress: res.data.contacts[0]["streetAddress"],
+          city: res.data.contacts[0]["city"],
+          state: res.data.contacts[0]["state"],
+          zip: res.data.contacts[0]["zip"],
+          notes: res.data.contacts[0]["notes"],
+          country: res.data.contacts[0]["country"],
+          email: res.data.contacts[0]["email"],
+          phone: res.data.contacts[0]["phone"],
+          interest: res.data.contacts[0]["interest"],
+          currentNotes: res.data.contacts[0]["notes"]
         })
-        this.setState({ currentObjectId: res.data[previous]["_id"] })
+        this.setState({ currentObjectId: res.data.contacts[0]["_id"] })
       }
       )
       .catch(err => console.log(err));
@@ -336,13 +358,13 @@ class ContactList extends React.Component {
           show: !this.state.show
         });
 
-        API.updateContactFromNote(this.state.currentObjectId, res.data._id).then(res => {
+        API.updateContactAddNote(this.state.currentObjectId, res.data._id).then(res => {
           API.getContact(res.data._id).then(res => {
             console.log(res.data)
             this.setState({ contact: res.data })
             this.setState({ notes: res.data.notes })
             this.setState({ currentNotes: res.data.notes })
-            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now, noteId: "" })
 
           })
         })
@@ -357,7 +379,7 @@ class ContactList extends React.Component {
           this.setState({ contact: res.data })
           this.setState({ notes: res.data.notes })
           this.setState({ currentNotes: res.data.notes })
-          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now, noteId: "" })
 
 
         })
@@ -371,6 +393,11 @@ class ContactList extends React.Component {
 
   deleteNote = (id) => {
     API.deleteNote(id).then(res => {
+      console.log(res.data)
+      API.updateContactDeleteNote(this.state.currentObjectId, res.data._id).then(res => {
+      })
+
+
       API.getContact(this.state.currentObjectId).then(res => {
         this.setState({ contact: res.data })
         this.setState({ notes: res.data.notes })
@@ -382,6 +409,7 @@ class ContactList extends React.Component {
 
 
   editNote = (id, body, title, date) => {
+    console.log(date)
     this.setState({
       show: !this.state.show,
       noteId: id,
@@ -397,7 +425,9 @@ class ContactList extends React.Component {
         sidebar={<b >
 
           {/* content inside bar */}
-          <button style={{ margin: "10px 5px 1px 30px " }, { fontSize: "20px" }} onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
+          <div id="div-for-add-button" style={{ textAlign: "center" }}>
+            <button id="add-button" onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
+          </div>
           <div className="list-group">
             {this.state.contacts.map((contact, index) => (
               <ContactCard
@@ -422,9 +452,9 @@ class ContactList extends React.Component {
           <Nav />
           <div className="App" >
 
-            <div className={this.state.IsContactListOpen ? "hidden" : "open"}>
+            <div className="view-contact-button">
               <button
-                onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">Open Contacts</button>
+                onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">View Contacts</button>
             </div>
             <p className="App-intro"></p>
             <ToggleDisplay show={this.state.show}>
@@ -537,7 +567,7 @@ class ContactList extends React.Component {
                                     </li>
                                     <li>
                                       <MDBIcon icon="envelope" size="2x" className="blue-text mt-4" />
-                                      <p>{this.state.contact.email}</p>
+                                      <p style={{ overflowWrap: "break-word" }}>{this.state.contact.email}</p>
                                     </li>
                                   </ul>
                                 </MDBCol>
