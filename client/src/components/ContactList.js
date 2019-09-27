@@ -43,7 +43,8 @@ class ContactList extends React.Component {
       noteBody: "",
       noteId: "",
       createdOn: Date.now,
-      username: ""
+      username: "",
+      uploadedImage: ""
     };
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -83,6 +84,12 @@ class ContactList extends React.Component {
   componentDidMount() {
     this.loadContacts();
     this.setState({ username: localStorage.getItem("username") })
+  }
+
+  setImage = image => {
+    this.setState({
+      uploadedImage: image
+    });
   }
 
   loadContacts = () => {
@@ -312,15 +319,14 @@ class ContactList extends React.Component {
 
   editContact = () => {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-
   }
-
 
   saveNote = () => {
     const noteData = {
       noteTitle: this.state.noteTitle,
       noteBody: this.state.noteBody,
-      createdOn: this.state.createdOn
+      createdOn: this.state.createdOn,
+      image: this.state.uploadedImage
     }
 
     if (this.state.noteId === "") {
@@ -436,7 +442,11 @@ class ContactList extends React.Component {
                       </div>
                       <div class="form-group">
                         <label for="exampleFormControlSelect1">ImageUpload</label>
-                        <ImageUpload setConvertedTextState={this.setConvertedTextState} />
+                        <ImageUpload
+                          setConvertedTextState={this.setConvertedTextState}
+                          setImage={this.setImage}
+                          uploadedImage={this.state.uploadedImage}
+                        />
                       </div>
                       <div class="form-group">
                         <label for="exampleFormControlSelect2"></label>
@@ -498,6 +508,7 @@ class ContactList extends React.Component {
                                                 noteTitle={note.noteTitle}
                                                 noteBody={note.noteBody}
                                                 createdOn={note.createdOn}
+                                                image={note.image}
                                                 deleteNote={this.deleteNote}
                                                 editNote={this.editNote}
                                               />

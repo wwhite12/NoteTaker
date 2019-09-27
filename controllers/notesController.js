@@ -1,4 +1,6 @@
 const db = require("../models");
+const fs = require("fs");
+const path = require("path");
 
 // Defining methods for the NotesController
 module.exports = {
@@ -15,9 +17,23 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
     create: function (req, res) {
+        const { image, ...newNote } = req.body;
+        const [, ext, imageData] = image.match(/data:image\/(jpeg|png);base64,(.+)/);
         db.Note
-            .create(req.body)
-            .then(dbModel => res.json(dbModel))
+            .create(newNote)
+            .then(dbNote => {
+                const imagesDirName = "notesImages";
+                const imagesDirPath = path.join(__dirname, `../${imagesDirName}`);
+                if (!fs.existsSync(imagesDirPath)) {
+                    fs.mkdirSync(imagesDirPath);
+                }
+                const noteImagePath = `${dbNote._id}.${ext}`;
+                fs.writeFile(`${imagesDirPath}/${noteImagePath}`, imageData, "base64", function (err, data) {
+                    if (err) throw new Error("Problem with saving file.");
+                    dbNote.image = `/${imagesDirName}/${noteImagePath}`;
+                    dbNote.save().then(() => res.json(dbNote));
+                })
+            })
             .catch(err => res.status(422).json(err));
     },
     update: function (req, res) {
