@@ -9,8 +9,8 @@ const NoteSchema = new Schema({
     noteId: String,
     noteTitle: String,
     noteBody: String,
-    createdOn: String
-
+    createdOn: String,
+    image: String
 
 });
 

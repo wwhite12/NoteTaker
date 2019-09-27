@@ -43,6 +43,7 @@ class ContactList extends React.Component {
       noteBody: "",
       noteId: "",
       createdOn: Date.now,
+      uploadedImage: "",
       username: localStorage.getItem("username"),
       userId: ""
     };
@@ -98,8 +99,17 @@ class ContactList extends React.Component {
 
   }
 
+
+  setImage = image => {
+    this.setState({
+      uploadedImage: image
+    });
+  }
+
+
   loadContacts = (id) => {
     API.getUser(id)
+
       .then(res => {
         console.log(res)
         this.setState({ contacts: res.data[0]["contacts"] })
@@ -331,15 +341,14 @@ class ContactList extends React.Component {
 
   editContact = () => {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-
   }
-
 
   saveNote = () => {
     const noteData = {
       noteTitle: this.state.noteTitle,
       noteBody: this.state.noteBody,
-      createdOn: this.state.createdOn
+      createdOn: this.state.createdOn,
+      image: this.state.uploadedImage
     }
 
     if (this.state.noteId === "") {
@@ -463,7 +472,11 @@ class ContactList extends React.Component {
                       </div>
                       <div class="form-group">
                         <label for="exampleFormControlSelect1">ImageUpload</label>
-                        <ImageUpload setConvertedTextState={this.setConvertedTextState} />
+                        <ImageUpload
+                          setConvertedTextState={this.setConvertedTextState}
+                          setImage={this.setImage}
+                          uploadedImage={this.state.uploadedImage}
+                        />
                       </div>
                       <div class="form-group">
                         <label for="exampleFormControlSelect2"></label>
@@ -525,6 +538,7 @@ class ContactList extends React.Component {
                                                 noteTitle={note.noteTitle}
                                                 noteBody={note.noteBody}
                                                 createdOn={note.createdOn}
+                                                image={note.image}
                                                 deleteNote={this.deleteNote}
                                                 editNote={this.editNote}
                                               />
