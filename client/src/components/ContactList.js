@@ -336,7 +336,7 @@ class ContactList extends React.Component {
             this.setState({ contact: res.data })
             this.setState({ notes: res.data.notes })
             this.setState({ currentNotes: res.data.notes })
-            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now, noteId: "" })
 
           })
         })
@@ -351,7 +351,7 @@ class ContactList extends React.Component {
           this.setState({ contact: res.data })
           this.setState({ notes: res.data.notes })
           this.setState({ currentNotes: res.data.notes })
-          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now, noteId: "" })
 
 
         })
@@ -376,6 +376,7 @@ class ContactList extends React.Component {
 
 
   editNote = (id, body, title, date) => {
+    console.log(date)
     this.setState({
       show: !this.state.show,
       noteId: id,
