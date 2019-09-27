@@ -1,5 +1,5 @@
 import axios from "axios";
-const User = typeof import("mongoose");
+
 
 function Auth() {
   function logIn(username, password, cb) {
@@ -13,11 +13,10 @@ function Auth() {
   }
 
   function signUp(username, password, cb) {
-    axios.post("/api/signup", { username, password }).then(req => {
-      User.create(req.body).then(function(res) {
-        res.json({ message: "user created" });
+    axios.post("/api/signup", { username, password }).then(res => {
+      
         cb(res);
-      });
+    
       console.log("Created User!");
     });
   }

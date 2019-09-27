@@ -9,6 +9,8 @@ import Auth from "../utils/Auth";
 
 
 
+
+
 class Login extends Component {
   static contextType = UserContext;
 
@@ -20,6 +22,7 @@ class Login extends Component {
       isFlipped: false
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleSignup = this.handleSignup.bind(this);
   }
 
   handleInputChange = event => {
@@ -32,12 +35,20 @@ class Login extends Component {
 
   handleClick(e) {
     e.preventDefault();
+    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+  }
+
+  handleSignup(e) {
+    e.preventDefault();
 
     const { username, password } = this.state;
 
     if (username && password) {
-      Auth.signup(username, password, response => {
+      Auth.signUp(username, password, response => {
         this.context.setUser(response);
+        .create(response).then(function(res) {
+          res.json({ message: "User Created" });
+        })
         console.log(this.context.response);
         this.props.history.push("/");
       });
@@ -45,7 +56,7 @@ class Login extends Component {
       alert("Enter username and password");
     }
 
-  
+    
 
   
 
@@ -96,8 +107,8 @@ class Login extends Component {
                                 value={this.state.username}
                                 name="username"
                                 onChange={this.handleInputChange}
-                                type="email"
-                                label="Your email"
+                                type="text"
+                                label="Your username"
                                 validate
                                 error="wrong"
                                 success="right"
@@ -156,7 +167,7 @@ class Login extends Component {
                             <form>
                               <p className="h4 text-center py-4">Sign up</p>
                               <div className="grey-text" id="thisidhere">
-                                <MDBInput
+                                {/* <MDBInput
                                   value={this.state.username}
                                   name="username"
                                   onChange={this.handleInputChange}
@@ -168,11 +179,13 @@ class Login extends Component {
                                   error="wrong"
                                   success="right"
                                   style={{display: "block"}}
-                                />
+                                /> */}
 
             
                                   <MDBInput
-
+                                    value={this.state.username}
+                                    name="username"
+                                    onChange={this.handleInputChange}
                                     label="Your name"
                                     icon="envelope"
                                     group
@@ -206,7 +219,7 @@ class Login extends Component {
                                 </div>
                                 <div className="text-center py-4 mt-3">
                                   <MDBBtn
-                                    onClick={this.handleClick}
+                                    onClick={this.handleSignup}
                                     color="primary"
                                     size="md"
                                   >

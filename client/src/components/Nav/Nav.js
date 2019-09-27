@@ -62,7 +62,7 @@ class Nav extends React.Component {
           </MDBFormInline>
         </MDBNavItem>
         <MDBNavItem>
-          <MDBFormInline waves>
+          <MDBFormInline waves onClick={this.onClick}>
           <button onClick={this.onClick} type="button" className="btn btn-primary" >Sign out</button>
           </MDBFormInline>
         </MDBNavItem>
