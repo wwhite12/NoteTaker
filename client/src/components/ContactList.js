@@ -56,8 +56,15 @@ class ContactList extends React.Component {
     mql.addListener(this.mediaQueryChanged);
     API.getUserByUsername(this.state.username).then(res => {
       const user = res.data[0]["_id"]
+      console.log(res.data[0]["contacts"][0]["notes"])
       this.setState({ userId: user })
-    });
+      API.getContact(res.data[0]["contacts"][0]["_id"]).then(res => {
+        console.log(res.data)
+        this.setState({
+          currentNotes: res.data["notes"]
+        })
+      });
+    })
   }
 
   componentWillUnmount() {
