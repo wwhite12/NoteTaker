@@ -10,7 +10,6 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 require("./routes/api/authentication")(app);
-
 require("./routes/ocr/ocr")(app);
 app.use(routes);
 

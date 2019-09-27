@@ -39,7 +39,25 @@ class Login extends Component {
 
   handleClick(e) {
     e.preventDefault();
+
+    const { username, password } = this.state;
+
+    if (username && password) {
+      Auth.signup(username, password, response => {
+        this.context.setUser(response);
+        console.log(this.context.response);
+        this.props.history.push("/");
+      });
+    } else {
+      alert("Enter username and password");
+    }
+
+  
+
+  
+
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+    
   }
 
   handleFormSubmit = event => {
@@ -84,8 +102,8 @@ class Login extends Component {
                                   value={this.state.username}
                                   name="username"
                                   onChange={this.handleInputChange}
-                                  type="email"
-                                  label="Your email"
+                                  type="text"
+                                  label="Your name"
                                   group
                                   type="email"
                                   validate
@@ -153,6 +171,9 @@ class Login extends Component {
                                 <p className="h4 text-center py-4">Sign up</p>
                                 <div className="grey-text" id="thisidhere">
                                   <MDBInput
+                                  value={this.state.username}
+                                  name="username"
+                                  onChange={this.handleInputChange}
                                     label="Your name"
                                     icon="user"
                                     group
@@ -163,17 +184,9 @@ class Login extends Component {
                                     style={{ display: "block" }}
                                   />
                                   <MDBInput
-                                    label="Your email"
+
+                                    label="Your name"
                                     icon="envelope"
-                                    group
-                                    type="email"
-                                    validate
-                                    error="wrong"
-                                    success="right"
-                                  />
-                                  <MDBInput
-                                    label="Confirm your email"
-                                    icon="exclamation-triangle"
                                     group
                                     type="text"
                                     validate
@@ -181,7 +194,22 @@ class Login extends Component {
                                     success="right"
                                   />
                                   <MDBInput
+                                  value={this.state.password}
+                                  name="password"
+                                  onChange={this.handleInputChange}
                                     label="Your password"
+                                    icon="lock"
+                                    group
+                                    type="password"
+                                    validate
+                                    error="wrong"
+                                    success="right"
+                                  />
+                                  <MDBInput
+                                  value={this.state.passwordVer}
+                                  name="passwordVer"
+                                  onChange={this.handleInputChange}
+                                    label="Confirm your password"
                                     icon="lock"
                                     group
                                     type="password"
