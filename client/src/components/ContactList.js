@@ -58,6 +58,8 @@ class ContactList extends React.Component {
     API.getUserByUsername(this.state.username).then(res => {
       const user = res.data[0]["_id"]
       if (res.data[0]["contacts"].length === 0) {
+        this.setState({ userId: user })
+
         console.log("OK")
       } else {
         console.log(res.data[0]["contacts"][0]["notes"])
