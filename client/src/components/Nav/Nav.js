@@ -18,6 +18,7 @@ class Nav extends React.Component {
 
 
 
+
   render() {
 
     return (
@@ -32,18 +33,20 @@ class Nav extends React.Component {
 
             </MDBNavItem>
           </MDBNavbarNav>
-          <MDBNavbarNav right>
-            <MDBNavItem>
-              <MDBFormInline >
-                <p id="loggedInAs">Logged in as: {localStorage.getItem("username")}</p>
-              </MDBFormInline>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBFormInline waves>
-                <button type="button" className="btn btn-primary">Sign out</button>
-              </MDBFormInline>
-            </MDBNavItem>
-          </MDBNavbarNav>
+          <div className={localStorage.getItem("username") ? "open" : "hidden"}>
+            <MDBNavbarNav right>
+              <MDBNavItem>
+                <MDBFormInline >
+                  <p id="loggedInAs">Logged in as: {localStorage.getItem("username")}</p>
+                </MDBFormInline>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBFormInline waves>
+                  <button type="button" className="btn btn-primary">Sign out</button>
+                </MDBFormInline>
+              </MDBNavItem>
+            </MDBNavbarNav>
+          </div>
         </MDBCollapse>
       </MDBNavbar>
 
