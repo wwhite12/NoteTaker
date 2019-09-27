@@ -21,6 +21,10 @@ export default {
     updateContact: function (id, contactData) {
         return axios.put("/api/contacts/" + id, contactData);
     },
+    // Updates a contact to the database
+    updateContactFromNote: function (id, notes) {
+        return axios.put("/api/contacts/" + id, { notes: notes });
+    },
     // Gets all notes
     getNotes: function () {
         return axios.get("/api/notes");

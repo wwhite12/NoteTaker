@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import API from "../utils/API";
-//import contacts from "./contacts.json";
 import ContactCard from "./ContactCard";
-import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } from "mdbreact";
+import { MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } from "mdbreact";
 import { MDBJumbotron } from "mdbreact";
 import NoteCard from "./NoteCard";
-import NewNoteButton from "./NewNoteButton";
 import ReactCardFlip from 'react-card-flip';
 import ToggleDisplay from 'react-toggle-display';
 import ImageUpload from './AddNoteBtn';
+import Nav from "./Nav/Nav";
+import Sidebar from "react-sidebar";
+import "./ContactListStyle.css"
 
-
+const mql = window.matchMedia(`(min-width: 800px)`);
 class ContactList extends React.Component {
 
   constructor() {
     super();
+
     this.state = {
       contacts: [],
       notes: [],
@@ -33,22 +35,45 @@ class ContactList extends React.Component {
       country: "USA",
       email: "",
       phone: "",
-      interest: ""
+      interest: "",
+      sidebarDocked: mql.matches,
+      sidebarOpen: false,
+      IsContactListOpen: true,
+      noteTitle: "",
+      noteBody: "",
+      noteId: "",
+      createdOn: Date.now,
+      username: ""
     };
-
-
-
+    this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
 
 
+
+  componentWillMount() {
+    mql.addListener(this.mediaQueryChanged);
+  }
+
+  componentWillUnmount() {
+    this.state.mql.removeListener(this.mediaQueryChanged);
+  }
+
+  mediaQueryChanged() {
+    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
+    this.setState(oldState => ({ IsContactListOpen: !oldState.IsContactListOpen }));
+  }
+
+
+  onSetSidebarOpen(open) {
+    this.setState({ sidebarOpen: open });
+  }
 
   handleClickNote() {
     this.setState({
       show: !this.state.show
     });
   }
-
-  
 
   handleClick(e) {
     e.preventDefault();
@@ -57,6 +82,7 @@ class ContactList extends React.Component {
 
   componentDidMount() {
     this.loadContacts();
+    this.setState({ username: localStorage.getItem("username") })
   }
 
   loadContacts = () => {
@@ -81,15 +107,10 @@ class ContactList extends React.Component {
           currentNotes: res.data[0]["notes"],
           currentObjectId: res.data[0]["_id"]
         });
-        console.log(this.state.currentObjectId)
       }
-
       )
-
       .catch(err => console.log(err));
-
   }
-
 
   addContact = (e) => {
     e.preventDefault();
@@ -108,12 +129,7 @@ class ContactList extends React.Component {
       currentObjectId: ""
     });
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
-
-
   }
-
-
-
   ViewContact = key => {
     const id = this.state.contacts[key]["_id"]
     this.setState({ contact: this.state.contacts[key] })
@@ -144,9 +160,7 @@ class ContactList extends React.Component {
 
     this.setState({
       [name]: value
-
     });
-
   };
 
   saveContact = event => {
@@ -216,7 +230,6 @@ class ContactList extends React.Component {
 
       API.updateContact(id, contactData).then(res => {
         console.log(res.data)
-        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
         this.setState({
           firstName: res.data["firstName"],
           lastName: res.data["lastName"],
@@ -230,22 +243,23 @@ class ContactList extends React.Component {
           phone: res.data["phone"],
           interest: res.data["interest"],
           notes: res.data["notes"],
-          currentNotes: ["notes"]
+          currentNotes: res.data["notes"]
         })
-        this.setState({ contact: contactData })
+
+        this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
 
         API.getContacts()
           .then(res => {
             console.log(res.data)
             this.setState({ contacts: res.data })
+            this.setState({ contact: contactData })
+
           })
           .catch(err => console.log(err));
 
       });
-
     }
-
   }
 
   deleteContact = () => {
@@ -267,8 +281,6 @@ class ContactList extends React.Component {
         interest: ""
       })
       this.setState({ contact: [] })
-
-
     });
     API.getContacts()
       .then(res => {
@@ -293,266 +305,310 @@ class ContactList extends React.Component {
           currentNotes: res.data[previous]["notes"]
         })
         this.setState({ currentObjectId: res.data[previous]["_id"] })
-
-
       }
       )
-
       .catch(err => console.log(err));
-
   }
-
 
   editContact = () => {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
 
-
   }
 
 
+  saveNote = () => {
+    const noteData = {
+      noteTitle: this.state.noteTitle,
+      noteBody: this.state.noteBody,
+      createdOn: this.state.createdOn
+    }
+
+    if (this.state.noteId === "") {
+
+      API.saveNote(noteData).then(res => {
+        this.setState({
+          show: !this.state.show
+        });
+
+        API.updateContactFromNote(this.state.currentObjectId, res.data._id).then(res => {
+          API.getContact(res.data._id).then(res => {
+            console.log(res.data)
+            this.setState({ contact: res.data })
+            this.setState({ notes: res.data.notes })
+            this.setState({ currentNotes: res.data.notes })
+            this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+
+          })
+        })
+      })
+
+
+    } else {
+      API.updateNote(this.state.noteId, noteData).then(res => {
+        this.setState({ show: !this.state.show })
+        API.getContact(this.state.currentObjectId).then(res => {
+          console.log(res.data)
+          this.setState({ contact: res.data })
+          this.setState({ notes: res.data.notes })
+          this.setState({ currentNotes: res.data.notes })
+          this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now })
+
+
+        })
+      })
+    }
+  }
+
+  setConvertedTextState = text => {
+    this.setState({ noteBody: text })
+  }
+
+  deleteNote = (id) => {
+    API.deleteNote(id).then(res => {
+      API.getContact(this.state.currentObjectId).then(res => {
+        this.setState({ contact: res.data })
+        this.setState({ notes: res.data.notes })
+        this.setState({ currentNotes: res.data.notes })
+      })
+
+    })
+  }
+
+
+  editNote = (id, body, title, date) => {
+    this.setState({
+      show: !this.state.show,
+      noteId: id,
+      noteTitle: title,
+      noteBody: body,
+      createdOn: date
+    });
+  }
+
   render() {
-
     return (
+      <Sidebar
+        sidebar={<b >
 
-
-
- <div className="App">
-        <p className="App-intro">
-        
-        </p>
-        <ToggleDisplay show={this.state.show}>
-
-      <div className="container">
-        <div className="row">
-          <div className="col">
-
-
-
-
-
-
-          <form>
-  <div class="form-group">
-    <label for="exampleFormControlInput1">Note title</label>
-    <MDBInput type="textarea" label="Example label" outline />
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">ImageUpload</label>
-    <ImageUpload /> 
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlSelect2">Note Body</label>
-    <MDBInput type="textarea" label="Example label" outline />
-  </div>
-  <button onClick={ () => this.handleClickNote() } name="addContact" type="button" className="btn btn-primary">save</button>
-</form>
-            
+          {/* content inside bar */}
+          <button style={{ margin: "10px 5px 1px 30px " }, { fontSize: "20px" }} onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
+          <div className="list-group">
+            {this.state.contacts.map((contact, index) => (
+              <ContactCard
+                ViewContact={this.ViewContact}
+                key={index}
+                id={index}
+                firstName={contact.firstName}
+                lastName={contact.lastName}
+                company={contact.company}
+              />
+            ))}
           </div>
-        </div>
-      </div>
 
+        </b>}
+        open={this.state.sidebarOpen}
+        docked={this.state.sidebarDocked}
+        onSetOpen={this.onSetSidebarOpen}
 
+      >
+        {/* main content next to side bar */}
+        <b>
+          <Nav />
+          <div className="App" >
 
-
-
-        
-
-
-
-
-
-        </ToggleDisplay>
-
-        <ToggleDisplay if={!this.state.show} tag="section">
-        <div>
-        <div className="sidebar" style={{ marginTop: "6%" }}>
-          <button onClick={this.addContact} name="addContact" type="button" className="btn btn-primary">Add contact</button>
-          <MDBTable scrollY maxHeight="100%" style={{ marginTop: "0px" }}>
-            <div className="list-group">
-              {this.state.contacts.map((contact, index) => (
-                <ContactCard
-                  ViewContact={this.ViewContact}
-                  key={index}
-                  id={index}
-                  firstName={contact.firstName}
-                  lastName={contact.lastName}
-                  company={contact.company}
-                  avatar={contact.avatar}
-                />
-              ))}
+            <div className={this.state.IsContactListOpen ? "hidden" : "open"}>
+              <button
+                onClick={() => this.onSetSidebarOpen(true)} name="addContact" type="button" className="btn btn-primary">Open Contacts</button>
             </div>
-          </MDBTable>
-        </div>
-
-        <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection="vertical">
-          <div key="front">
-            <div>
+            <p className="App-intro"></p>
+            <ToggleDisplay show={this.state.show}>
               <div className="container">
                 <div className="row">
                   <div className="col">
+                    <form>
+                      <div class="form-group">
+                        <label for="exampleFormControlInput1"></label>
+                        <MDBInput type="date" name="createdOn" value={this.state.createdOn} onChange={this.handleInputChange} label="Date" outline />
 
-                    <MDBJumbotron fluid>
-                      <div className="text-md-right">
+                        <label for="exampleFormControlInput1"></label>
+                        <MDBInput type="textarea" value={this.state.noteTitle} name="noteTitle" onChange={this.handleInputChange} label="Note Title" outline />
 
-                        <MDBBtn onClick={this.editContact} color="primary" size="md">
-                          Edit Contact
-                  </MDBBtn>
-                        <MDBBtn onClick={this.deleteContact} color="primary" size="md">
-                          Delete Contact
-                  </MDBBtn>
                       </div>
-                      <h2 className="h1-responsive font-weight-bold text-center my-5">
-                        {this.state.contact.firstName} {this.state.contact.lastName}
-                      </h2>
-                      <MDBRow>
-                        <MDBCol md="9" className="md-0 mb-5 ">
-                          <form>
-                            <MDBRow>
-                              <MDBCol md="6 ">
-                                <h4 id="company-name" className="h4-responsive font-weight-bold my-1">
-                                  {this.state.contact.company}
-                                </h4>
-                              </MDBCol>
-                            </MDBRow>
-
-                            <MDBRow>
-                              <MDBCol>
-                                <div className="mb-0">
-                      
-                                <button onClick={ () => this.handleClickNote() } name="addContact" type="button" className="btn btn-primary">Add contact</button>
-                               
-                                  
-                                </div>
-                              </MDBCol>
-                            </MDBRow>
-
-                            <MDBRow>
-                              <MDBCol id="notes-list" md="12">
-                                <div className="md-form mb-0">
-                                  <MDBTable bordered scrollY maxHeight="300px">
-                                    {this.state.currentNotes.map((note, index) => (
-                                      <NoteCard
-                                        key={index}
-                                        id={note.id}
-                                        title={note.title}
-                                        noteBody={note.noteBody}
-                                        createdOn={note.createdOn}
-                                        contactRef={note.contactReg}
-                                      />
-                                    ))}
-                                  </MDBTable>
-                                </div>
-                              </MDBCol>
-                            </MDBRow>
-                          </form>
-                        </MDBCol>
-                        <MDBCol id="customer-information" md="3" className="text-center">
-                          <ul className="list-unstyled mb-0">
-                            <li>
-                              <MDBIcon icon="map-marker-alt" size="2x" className="blue-text" />
-                              <p>
-                                {this.state.contact.streetAddress + ", "}
-                                {this.state.contact.city + ", "}
-                                {this.state.contact.state + ", "}
-                                {this.state.contact.zip + " "}
-                                {this.state.contact.country}
-
-                              </p>
-                            </li>
-                            <li>
-                              <MDBIcon icon="phone" size="2x" className="blue-text mt-4" />
-                              <p>{this.state.contact.phone}</p>
-                            </li>
-                            <li>
-                              <MDBIcon icon="envelope" size="2x" className="blue-text mt-4" />
-                              <p>{this.state.contact.email}</p>
-                            </li>
-                          </ul>
-                        </MDBCol>
-                      </MDBRow>
-                    </MDBJumbotron>
+                      <div class="form-group">
+                        <label for="exampleFormControlSelect1">ImageUpload</label>
+                        <ImageUpload setConvertedTextState={this.setConvertedTextState} />
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleFormControlSelect2"></label>
+                        <MDBInput type="textarea" value={this.state.noteBody} name="noteBody" onChange={this.handleInputChange} label="Note Body" outline />
+                      </div>
+                      <button onClick={() => this.saveNote()} name="addNote" type="button" className="btn btn-primary">Save</button>
+                    </form>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div key="back">
-            <div className="container">
-              <div className="row">
-                <div className="col">
-                  <div className="text-md-right">
-                    <MDBBtn onClick={this.saveContact} color="primary" size="md">
-                      Save
+            </ToggleDisplay>
+            <ToggleDisplay if={!this.state.show} tag="section">
+              <div>
+                <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection="vertical">
+                  <div key="front">
+                    <div>
+                      <div className="container">
+                        <div className="row">
+                          <div className="col">
+                            <MDBJumbotron fluid>
+                              <div className="container">
+                                <div calssName="row" style={{ float: "right" }} >
+                                  <MDBBtn onClick={this.editContact} color="primary" size="md">
+                                    Edit Contact </MDBBtn>
+                                  <MDBBtn onClick={this.deleteContact} color="primary" size="md">
+                                    Delete Contact</MDBBtn>
+                                </div>
+                                <div className="row" >
+                                  <h2 style={{ margin: "0px 0 0 20px" }} className="h1-responsive font-weight-bold text-center my-5">
+                                    {this.state.contact.firstName} {this.state.contact.lastName}
+                                  </h2>
+                                </div>
+                              </div>
+                              <MDBRow>
+                                <MDBCol md="9" className="md-0 mb-5 ">
+                                  <form>
+                                    <MDBRow>
+                                      <MDBCol md="6 ">
+                                        <h4 id="company-name" className="h4-responsive font-weight-bold my-1">
+                                          Company: {this.state.contact.company}
+                                        </h4>
+                                      </MDBCol>
+                                    </MDBRow>
+                                    <MDBRow>
+                                      <MDBCol>
+                                        <div className="mb-0">
+                                          <button style={{ marginLeft: "20px" }} onClick={() => this.handleClickNote()} name="addContact" type="button" className="btn btn-primary">Add Note</button>
+                                        </div>
+                                      </MDBCol>
+                                    </MDBRow>
+                                    <MDBRow>
+                                      <MDBCol id="notes-list" md="12">
+                                        <div className="md-form mb-0">
+                                          <MDBTable bordered scrollY maxHeight="300px">
+                                            {this.state.currentNotes.map((note, index) => (
+                                              <NoteCard
+                                                key={index}
+                                                id={note._id}
+                                                noteTitle={note.noteTitle}
+                                                noteBody={note.noteBody}
+                                                createdOn={note.createdOn}
+                                                deleteNote={this.deleteNote}
+                                                editNote={this.editNote}
+                                              />
+                                            ))}
+                                          </MDBTable>
+                                        </div>
+                                      </MDBCol>
+                                    </MDBRow>
+                                  </form>
+                                </MDBCol>
+                                <MDBCol id="customer-information" md="3" className="text-center">
+                                  <ul className="list-unstyled mb-0">
+                                    <li>
+                                      <MDBIcon icon="map-marker-alt" size="2x" className="blue-text" />
+                                      <p>
+                                        {this.state.contact.streetAddress + ", "}
+                                        {this.state.contact.city + ", "}
+                                        {this.state.contact.state + ", "}
+                                        {this.state.contact.zip + " "}
+                                        {this.state.contact.country}
+                                      </p>
+                                    </li>
+                                    <li>
+                                      <MDBIcon icon="phone" size="2x" className="blue-text mt-4" />
+                                      <p>{this.state.contact.phone}</p>
+                                    </li>
+                                    <li>
+                                      <MDBIcon icon="envelope" size="2x" className="blue-text mt-4" />
+                                      <p>{this.state.contact.email}</p>
+                                    </li>
+                                  </ul>
+                                </MDBCol>
+                              </MDBRow>
+                            </MDBJumbotron>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div key="back">
+                    <div className="container">
+                      <div className="row">
+                        <div className="col">
+                          <div className="text-md-right">
+                            <MDBBtn onClick={this.saveContact} color="primary" size="md">
+                              Save
                     </MDBBtn>
+                          </div>
+                          <form>
+                            <div className="form-row">
+                              <div className="form-group col-md-6">
+                                <label for="input-first-name">First Name</label>
+                                <input type="text" value={this.state.firstName} name="firstName" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                              <div className="form-group col-md-6">
+                                <label for="input-last-name">Last Name</label>
+                                <input type="text" value={this.state.lastName} name="lastName" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                            </div>
+                            <div className="form-row">
+                              <div className="form-group col-md-12">
+                                <label for="input-last-name">Company</label>
+                                <input type="text" value={this.state.company} name="company" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                            </div>
+                            <div className="form-group">
+                              <label for="input-address"> Street Address</label>
+                              <input type="text" value={this.state.streetAddress} name="streetAddress" onChange={this.handleInputChange} className="form-control" />
+                            </div>
+                            <div className="form-row">
+                              <div className="form-group col-md-6">
+                                <label for="input-city">City</label>
+                                <input type="text" value={this.state.city} name="city" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                              <div className="form-group col-md-4">
+                                <label for="input-state">State</label>
+                                <input type="text" value={this.state.state} name="state" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                              <div className="form-group col-md-2">
+                                <label for="input-zip">Zip</label>
+                                <input type="text" value={this.state.zip} name="zip" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                            </div>
+                            <div className="form-row">
+                              <div className="form-group col-md-6">
+                                <label for="input-email">Email</label>
+                                <input type="text" value={this.state.email} name="email" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                              <div className="form-group col-md-6">
+                                <label for="input-phone">Phone Number</label>
+                                <input type="text" value={this.state.phone} name="phone" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                            </div>
+                            <div className="form-row">
+                              <div className="form-group col-md-6">
+                                <label for="input-interest">Personal Interest</label>
+                                <input type="text" value={this.state.interest} name="interest" onChange={this.handleInputChange} className="form-control" />
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <form>
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <label for="input-first-name">First Name</label>
-                        <input type="text" value={this.state.firstName} name="firstName" onChange={this.handleInputChange} className="form-control" />
-
-                      </div>
-                      <div className="form-group col-md-6">
-                        <label for="input-last-name">Last Name</label>
-                        <input type="text" value={this.state.lastName} name="lastName" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group col-md-12">
-                        <label for="input-last-name">Company</label>
-                        <input type="text" value={this.state.company} name="company" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label for="input-address"> Street Address</label>
-                      <input type="text" value={this.state.streetAddress} name="streetAddress" onChange={this.handleInputChange} className="form-control" />
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <label for="input-city">City</label>
-                        <input type="text" value={this.state.city} name="city" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                      <div className="form-group col-md-4">
-                        <label for="input-state">State</label>
-                        <input type="text" value={this.state.state} name="state" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                      <div className="form-group col-md-2">
-                        <label for="input-zip">Zip</label>
-                        <input type="text" value={this.state.zip} name="zip" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <label for="input-email">Email</label>
-                        <input type="text" value={this.state.email} name="email" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                      <div className="form-group col-md-6">
-                        <label for="input-phone">Phone Number</label>
-                        <input type="text" value={this.state.phone} name="phone" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <label for="input-interest">Personal Interest</label>
-                        <input type="text" value={this.state.interest} name="interest" onChange={this.handleInputChange} className="form-control" />
-                      </div>
-                      {/* <div className="form-group col-md-6">
-                        <label for="avatar">Avatar</label>
-                        <input value={this.state.contact.avatar} type="text" className="form-control" />
-                      </div> */}
-                    </div>
-                  </form>
-                </div>
+                </ReactCardFlip>
               </div>
-            </div>
+            </ToggleDisplay>
           </div>
-        </ReactCardFlip>
-        </div>
-        </ToggleDisplay>
-        </div>
+        </b>
+      </Sidebar>
     );
   };
-
-
 }
 export default ContactList

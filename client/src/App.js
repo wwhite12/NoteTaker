@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ContactForm from "./components/ContactForm";
@@ -21,17 +21,24 @@ const HomePage = props => (
 
       <div className="row">
         <div className="col">
-          <ContactForm />
         </div>
         <div className="col">
-          <NoteForm />
         </div>
       </div>
     </div>
   </div>
 );
 
+<<<<<<< HEAD
 class App extends Component {
+=======
+// const LoginPage = props =>
+//   <div>
+//     <Login />
+//   </div>
+
+class App extends React.Component {
+>>>>>>> 0460412aa111245c9d9fc145de0d7e0bb7f42e1f
   state = {
     user: null
   };

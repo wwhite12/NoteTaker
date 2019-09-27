@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import React from "react";
 // import { MDBContainer, MDBRow, MDBCol, MDBIcon, MDBBtn, MDBInput, MDBTable } from "mdbreact";
 // import { MDBJumbotron } from "mdbreact";
@@ -92,3 +93,5 @@
 
 
 // // contenteditable="false"
+=======
+>>>>>>> 0460412aa111245c9d9fc145de0d7e0bb7f42e1f

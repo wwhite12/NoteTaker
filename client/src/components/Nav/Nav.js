@@ -1,17 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import {
-  MDBNavbar,
-  MDBNavbarBrand,
-  MDBNavbarNav,
-  MDBNavItem,
-  MDBNavLink,
-  MDBNavbarToggler,
-  MDBCollapse,
-  MDBFormInline,
-  MDBDropdown,
-  MDBDropdownToggle,
-  MDBDropdownMenu,
-  MDBDropdownItem
+  MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem,  MDBNavbarToggler, MDBCollapse, MDBFormInline,
 } from "mdbreact";
 
 import "./NavStyle.css";
@@ -65,12 +54,16 @@ class Nav extends React.Component {
       <MDBNavbarNav right>
       <MDBNavItem>
           <MDBFormInline >
-            <a id="loggedInAs">Logged in as: {this.state.username}</a>
+            <p id="loggedInAs">Logged in as: {this.state.username}</p>
           </MDBFormInline>
         </MDBNavItem>
         <MDBNavItem>
           <MDBFormInline waves>
+<<<<<<< HEAD
           <button onClick={this.onClick} type="button" className="btn btn-primary" >Sign out</button>
+=======
+          <button type="button" className="btn btn-primary">Sign out</button>
+>>>>>>> 0460412aa111245c9d9fc145de0d7e0bb7f42e1f
           </MDBFormInline>
         </MDBNavItem>
       </MDBNavbarNav>
