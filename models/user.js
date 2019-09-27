@@ -14,7 +14,13 @@ const UserSchema = new mongoose.Schema({
       unique: true
     }
   },
-  password: String
+  password: String,
+  contacts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Contact"
+    }
+  ]
 
 
 });

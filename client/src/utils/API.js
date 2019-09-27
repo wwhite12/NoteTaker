@@ -22,8 +22,12 @@ export default {
         return axios.put("/api/contacts/" + id, contactData);
     },
     // Updates a contact to the database
-    updateContactFromNote: function (id, notes) {
+    updateContactAddNote: function (id, notes) {
         return axios.put("/api/contacts/" + id, { notes: notes });
+    },
+    updateContactDeleteNote: function (id, noteId) {
+        console.log('** updateContactDelete', noteId)
+        return axios.delete("/api/contacts/" + id + "/notes/" + noteId);
     },
     // Gets all notes
     getNotes: function () {
@@ -43,6 +47,19 @@ export default {
     // Updates a contact to the database
     updateNote: function (id, noteData) {
         return axios.put("/api/notes/" + id, noteData);
-    }
+    },
+    // Updates a contact to the database
+    updateUser: function (id, userData) {
+        return axios.put("/api/users/" + id, userData);
+    },
+    updateUserFromContacts: function (id, contacts) {
+        return axios.put("/api/users/" + id, { contacts: contacts });
+    },
+    getUserByUsername: function (username) {
+        return axios.get("/api/username/" + username);
+    },
+    getUser: function (id) {
+        return axios.get("/api/users/" + id);
+    },
 
 };

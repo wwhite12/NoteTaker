@@ -29,10 +29,6 @@ const HomePage = props => (
   </div>
 );
 
-// const LoginPage = props =>
-//   <div>
-//     <Login />
-//   </div>
 
 class App extends React.Component {
   state = {
@@ -58,7 +54,6 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App">
-          <Nav />
 
           <UserContext.Provider
             value={{

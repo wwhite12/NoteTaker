@@ -23,7 +23,6 @@ module.exports = {
             .catch(err => res.status(422).json(err));
     },
     update: function (req, res) {
-        console.log(req.body)
         db.Contact
             .findOneAndUpdate({ _id: req.params.id },
                 req.body.notes
@@ -36,6 +35,19 @@ module.exports = {
                         }
                     }
                     : req.body)
+            .populate("notes")
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err));
+    },
+    updateNoteArray: function (req, res) {
+        console.log('*****', req.params)
+        db.Contact
+            .findOneAndUpdate({ _id: req.params.id },
+                {
+                    $pull: {
+                        notes: req.params.noteId
+                    }
+                })
             .populate("notes")
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));

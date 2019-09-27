@@ -1,18 +1,24 @@
-
-#customer-information{
-  
- 
+#company-name {
+  margin: 0 0 0 20px;
 }
-#company-name{
-  margin:0 0 0 20px;
-}
-#notes-list{
+#notes-list {
   margin-left: 20px;
 }
-.hidden{
-  display:none;
+.hidden {
+  display: none;
 }
-.open{
+.open {
   display: inline;
 }
-    
+#div-for-add-button {
+  margin-top: 35px;
+}
+#add-button {
+  font-size: 20px;
+}
+
+@media (min-width: 800px) {
+  .view-contact-button {
+    display: none;
+  }
+}
