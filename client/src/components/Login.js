@@ -1,6 +1,7 @@
 //import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBModalFooter } from 'mdbreact';
-import "./LoginStyle.css"
+import "./LoginStyle.css";
+import API from "../utils/API";
 import ReactCardFlip from 'react-card-flip';
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
@@ -36,8 +37,21 @@ class Login extends Component {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
   }
 
+
+
+
   handleFormSubmit = event => {
     event.preventDefault();
+    const contactData = {
+      firstName: "Welcome",
+      lastName: localStorage.getItem("username"),
+      notes: [],
+    }
+
+    API.saveContact(contactData).then(res => {
+      console.log(res)
+    })
+
     const { username, password } = this.state;
     localStorage.setItem("username", this.state.username)
 
