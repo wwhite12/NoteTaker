@@ -22,6 +22,7 @@ class Login extends Component {
       isFlipped: false
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleSignup = this.handleSignup.bind(this);
   }
 
   handleInputChange = event => {
@@ -37,20 +38,34 @@ class Login extends Component {
     this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
   }
 
+  handleSignup(e) {
+    e.preventDefault();
+
+    const { username, password } = this.state;
+
+    if (username && password) {
+      Auth.signUp(username, password, response => {
+        this.context.setUser(response);
+        API.saveUser(response.body).then(function (res) {
+        })
+        this.props.history.push("/");
+      });
+    } else {
+      alert("Enter username and password");
+    }
+
+
+
+
+
+    this.setState(prevState => ({ isFlipped: !prevState.isFlipped }));
+
+  }
 
 
 
   handleFormSubmit = event => {
     event.preventDefault();
-    const contactData = {
-      firstName: "Welcome",
-      lastName: localStorage.getItem("username"),
-      notes: [],
-    }
-
-    API.saveContact(contactData).then(res => {
-      console.log(res)
-    })
 
     const { username, password } = this.state;
     localStorage.setItem("username", this.state.username)
@@ -96,7 +111,7 @@ class Login extends Component {
                                     name="username"
                                     onChange={this.handleInputChange}
                                     type="email"
-                                    label="Your email"
+                                    label="username"
                                     validate
                                     error="wrong"
                                     success="right"
@@ -106,7 +121,7 @@ class Login extends Component {
                                     name="password"
                                     onChange={this.handleInputChange}
                                     type="password"
-                                    label="Your password"
+                                    label="password"
                                     validate
                                     containerClass="mb-0"
                                   />
@@ -155,48 +170,46 @@ class Login extends Component {
                                 <form>
                                   <p className="h4 text-center py-4">Sign up</p>
                                   <div className="grey-text" id="thisidhere">
-                                    <MDBInput
-
-                                      label="Your name"
-                                      icon="user"
-                                      group
-                                      type="text"
-                                      validate
-                                      error="wrong"
-                                      success="right"
-                                      style={{ display: "block" }}
-                                    />
-
 
                                     <MDBInput
-                                      label="Your email"
+                                      value={this.state.username}
+                                      name="username"
+                                      onChange={this.handleInputChange}
+                                      label="username"
                                       icon="envelope"
                                       group
-                                      type="email"
-                                      validate
-                                      error="wrong"
-                                      success="right"
-                                    />
-                                    <MDBInput
-                                      label="Confirm your email"
-                                      icon="exclamation-triangle"
-                                      group
                                       type="text"
                                       validate
                                       error="wrong"
                                       success="right"
                                     />
                                     <MDBInput
-                                      label="Your password"
+                                      value={this.state.password}
+                                      name="password"
+                                      onChange={this.handleInputChange}
+                                      label="password"
                                       icon="lock"
                                       group
                                       type="password"
                                       validate
+                                      error="wrong"
+                                      success="right"
+                                    />
+                                    <MDBInput
+                                      value={this.state.passwordVer}
+                                      name="passwordVer"
+                                      onChange={this.handleInputChange}
+                                      label="confirm password"
+                                      icon="lock"
+                                      group
+                                      type="password"
+                                      validate
+                                      containerClass="mb-0"
                                     />
                                   </div>
                                   <div className="text-center py-4 mt-3">
                                     <MDBBtn
-                                      onClick={this.handleClick}
+                                      onClick={this.handleSignup}
                                       color="primary"
                                       size="md"
                                     >

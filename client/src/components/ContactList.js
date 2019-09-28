@@ -11,11 +11,11 @@ import Nav from "./Nav/Nav";
 import Sidebar from "react-sidebar";
 import "./ContactListStyle.css"
 
-const mql = window.matchMedia(`(min-width: 800px)`);
 class ContactList extends React.Component {
 
   constructor() {
     super();
+    this.mql = window.matchMedia(`(min-width: 800px)`);
 
     this.state = {
       contacts: [],
@@ -36,7 +36,7 @@ class ContactList extends React.Component {
       email: "",
       phone: "",
       interest: "",
-      sidebarDocked: mql.matches,
+      sidebarDocked: this.mql.matches,
       sidebarOpen: false,
       IsContactListOpen: true,
       noteTitle: "",
@@ -54,33 +54,62 @@ class ContactList extends React.Component {
 
 
   componentWillMount() {
-    mql.addListener(this.mediaQueryChanged);
+    this.mql.addListener(this.mediaQueryChanged);
+    this.getUser()
+
+  }
+
+  getUser() {
+    this.setState({ contacts: [] })
     API.getUserByUsername(this.state.username).then(res => {
       const user = res.data[0]["_id"]
+      this.setState({ userId: user })
       if (res.data[0]["contacts"].length === 0) {
-        this.setState({ userId: user })
+        this.setState({
+          contact:
+          {
+            firstName: "Welcome,",
+            lastName: "Add a Contact to Begin"
+          }
 
-        console.log("OK")
+        })
+        console.log(this.state.contact)
       } else {
-        console.log(res.data[0]["contacts"][0]["notes"])
-        this.setState({ userId: user })
+        this.setState({ contacts: res.data[0]["contacts"] })
+        this.setState({ contact: res.data[0]["contacts"][0] })
+        this.setState({
+          firstName: res.data[0]["contacts"][0]["firstName"],
+          lastName: res.data[0]["contacts"][0]["lastName"],
+          company: res.data[0]["contacts"][0]["company"],
+          streetAddress: res.data[0]["contacts"][0]["streetAddress"],
+          city: res.data[0]["contacts"][0]["city"],
+          state: res.data[0]["contacts"][0]["state"],
+          zip: res.data[0]["contacts"][0]["zip"],
+          country: res.data[0]["contacts"][0]["country"],
+          email: res.data[0]["contacts"][0]["email"],
+          phone: res.data[0]["contacts"][0]["phone"],
+          interest: res.data[0]["contacts"][0]["interest"],
+          notes: res.data[0]["contacts"][0]["notes"],
+          currentNotes: res.data[0]["contacts"][0]["notes"],
+          currentObjectId: res.data[0]["contacts"][0]["_id"]
+        });
         API.getContact(res.data[0]["contacts"][0]["_id"]).then(res => {
           console.log(res.data)
           this.setState({
+            notes: res.data["notes"],
             currentNotes: res.data["notes"]
           })
-        });
+        })
       }
     })
   }
 
-
   componentWillUnmount() {
-    this.state.mql.removeListener(this.mediaQueryChanged);
+    this.mql.removeListener(this.mediaQueryChanged);
   }
 
   mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
+    this.setState({ sidebarDocked: this.mql.matches, sidebarOpen: false });
     this.setState(oldState => ({ IsContactListOpen: !oldState.IsContactListOpen }));
   }
 
@@ -90,9 +119,7 @@ class ContactList extends React.Component {
   }
 
   handleClickNote() {
-    this.setState({
-      show: !this.state.show
-    });
+    this.setState({ noteTitle: "", noteBody: "", createdOn: Date.now, noteId: "", show: !this.state.show, uploadedImage: "" })
   }
 
   handleClick(e) {
@@ -101,7 +128,7 @@ class ContactList extends React.Component {
   }
 
   componentDidMount() {
-    this.loadContacts(this.state.userId);
+    // this.loadContacts(this.state.userId);
 
 
   }
@@ -114,52 +141,53 @@ class ContactList extends React.Component {
   }
 
 
-  loadContacts = (id) => {
-    API.getUser(id)
+  // loadContacts = (usertest) => {
+  //   console.log(this.state.userId)
+  //   API.getUser(usertest)
 
-      .then(res => {
-        console.log(res)
-        if (res.data[0]["contacts"].length === 0) {
-          this.setState({
-            firstName: "Welcome",
-            lastName: this.state.username,
-            company: "",
-            streetAddress: "",
-            city: "",
-            state: "",
-            zip: "",
-            country: "",
-            notes: [],
-            email: "",
-            phone: "",
-            interest: "",
-            currentObjectId: ""
-          });
-        } else {
-          this.setState({ contacts: res.data[0]["contacts"] })
-          this.setState({ contact: res.data[0]["contacts"][0] })
-          this.setState({
-            firstName: res.data[0]["contacts"][0]["firstName"],
-            lastName: res.data[0]["contacts"][0]["lastName"],
-            company: res.data[0]["contacts"][0]["company"],
-            streetAddress: res.data[0]["contacts"][0]["streetAddress"],
-            city: res.data[0]["contacts"][0]["city"],
-            state: res.data[0]["contacts"][0]["state"],
-            zip: res.data[0]["contacts"][0]["zip"],
-            country: res.data[0]["contacts"][0]["country"],
-            email: res.data[0]["contacts"][0]["email"],
-            phone: res.data[0]["contacts"][0]["phone"],
-            interest: res.data[0]["contacts"][0]["interest"],
-            notes: res.data[0]["contacts"][0]["notes"],
-            currentNotes: res.data[0]["contacts"][0]["notes"],
-            currentObjectId: res.data[0]["contacts"][0]["_id"]
-          });
-        }
-      }
-      )
+  //     .then(res => {
+  //       console.log(res.data[0]["contacts"])
+  //       if (res.data[0]["contacts"].length === 0) {
+  //         this.setState({
+  //           firstName: "Welcome",
+  //           lastName: this.state.username,
+  //           company: "",
+  //           streetAddress: "",
+  //           city: "",
+  //           state: "",
+  //           zip: "",
+  //           country: "",
+  //           notes: [],
+  //           email: "",
+  //           phone: "",
+  //           interest: "",
+  //           currentObjectId: ""
+  //         });
+  //       } else {
+  //         this.setState({ contacts: res.data[0]["contacts"] })
+  //         this.setState({ contact: res.data[0]["contacts"][0] })
+  //         this.setState({
+  //           firstName: res.data[0]["contacts"][0]["firstName"],
+  //           lastName: res.data[0]["contacts"][0]["lastName"],
+  //           company: res.data[0]["contacts"][0]["company"],
+  //           streetAddress: res.data[0]["contacts"][0]["streetAddress"],
+  //           city: res.data[0]["contacts"][0]["city"],
+  //           state: res.data[0]["contacts"][0]["state"],
+  //           zip: res.data[0]["contacts"][0]["zip"],
+  //           country: res.data[0]["contacts"][0]["country"],
+  //           email: res.data[0]["contacts"][0]["email"],
+  //           phone: res.data[0]["contacts"][0]["phone"],
+  //           interest: res.data[0]["contacts"][0]["interest"],
+  //           notes: res.data[0]["contacts"][0]["notes"],
+  //           currentNotes: res.data[0]["contacts"][0]["notes"],
+  //           currentObjectId: res.data[0]["contacts"][0]["_id"]
+  //         });
+  //       }
+  //     }
+  //     )
 
-      .catch(err => console.log(err));
-  }
+  //     .catch(err => console.log(err));
+  // }
 
 
   addContact = (e) => {
@@ -203,6 +231,12 @@ class ContactList extends React.Component {
       })
 
     })
+    if (this.state.show) {
+      this.setState({ show: !this.state.show })
+
+    }
+
+
   }
 
   handleInputChange = event => {
@@ -336,31 +370,32 @@ class ContactList extends React.Component {
         phone: "",
         interest: ""
       })
-      this.setState({ contact: [] })
+      // this.setState({ contact: [] })
     });
-    API.getUser(this.state.userId)
-      .then(res => {
-        this.setState({ contact: res.data.contacts[0] })
-        this.setState({ contacts: res.data.contacts })
-        this.setState({
-          firstName: res.data.contacts[0]["firstName"],
-          lastName: res.data.contacts[0]["lastName"],
-          company: res.data.contacts[0]["company"],
-          streetAddress: res.data.contacts[0]["streetAddress"],
-          city: res.data.contacts[0]["city"],
-          state: res.data.contacts[0]["state"],
-          zip: res.data.contacts[0]["zip"],
-          notes: res.data.contacts[0]["notes"],
-          country: res.data.contacts[0]["country"],
-          email: res.data.contacts[0]["email"],
-          phone: res.data.contacts[0]["phone"],
-          interest: res.data.contacts[0]["interest"],
-          currentNotes: res.data.contacts[0]["notes"]
-        })
-        this.setState({ currentObjectId: res.data.contacts[0]["_id"] })
-      }
-      )
-      .catch(err => console.log(err));
+    this.getUser()
+    // API.getUser(this.state.userId)
+    //   .then(res => {
+    //     this.setState({ contact: res.data.contacts[0] })
+    //     this.setState({ contacts: res.data.contacts })
+    //     this.setState({
+    //       firstName: res.data.contacts[0]["firstName"],
+    //       lastName: res.data.contacts[0]["lastName"],
+    //       company: res.data.contacts[0]["company"],
+    //       streetAddress: res.data.contacts[0]["streetAddress"],
+    //       city: res.data.contacts[0]["city"],
+    //       state: res.data.contacts[0]["state"],
+    //       zip: res.data.contacts[0]["zip"],
+    //       notes: res.data.contacts[0]["notes"],
+    //       country: res.data.contacts[0]["country"],
+    //       email: res.data.contacts[0]["email"],
+    //       phone: res.data.contacts[0]["phone"],
+    //       interest: res.data.contacts[0]["interest"],
+    //       currentNotes: res.data.contacts[0]["notes"]
+    //     })
+    //     this.setState({ currentObjectId: res.data.contacts[0]["_id"] })
+    //   }
+    //   )
+    //   .catch(err => console.log(err));
   }
 
   editContact = () => {
