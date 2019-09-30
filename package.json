@@ -12,7 +12,8 @@
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build",
     "seedContacts": "node scripts/seedContacts.js",
-    "seedNotes": "node scripts/seedNotes.js"
+    "seedNotes": "node scripts/seedNotes.js",
+    "preinstall": "node scripts/gcpSetup.js"
   },
   "author": "",
   "license": "ISC",
