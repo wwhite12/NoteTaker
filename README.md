@@ -1,29 +1,24 @@
-# Create React Express App
+# LazySalesman
 
-## About This Boilerplate
+## Background
 
-This setup allows for a Node/Express/React app which can be easily deployed to Heroku.
+Lightweight CRM that includes OCR technology to convert handwritten notes into text.
 
-The front-end React app will auto-reload as it's updated via webpack dev server, and the backend Express app will auto-reload independently with nodemon.
+## Instructions
 
-## Starting the app locally
+A user will create a new account and sign into the application. From there, a user can have secure access to their new created contacts and notes. A user is able to add new contacts along with being able to convert an image of handwritten notes into text. Since no OCR is perfect, the user will be able to directly edit the converted notes before saving them to the database. The user is also able to delete and edit existing contacts and notes.
 
-Start by installing front and backend dependencies. While in this directory, run the following command:
+## Technology
 
-```
-npm install
-```
+* React.js
+* Express
+* MongoDB/Mongoose
+* Google Cloud Vision OCR
+* MDBReact
 
-This should install node modules within the server and the client folder.
+## Creators
 
-After both installations complete, run the following command in your terminal:
-
-```
-npm start
-```
-
-Your app should now be running on <http://localhost:3000>. The Express server should intercept any AJAX requests from the client.
-
-## Deployment (Heroku)
-
-To deploy, simply add and commit your changes, and push to Heroku. As is, the NPM scripts should take care of the rest.
+* Eric Billings
+* Aijah Chappell
+* Horacio Garcia
+* William White
